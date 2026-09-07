@@ -1,0 +1,4710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Farmer Setu | Smart Farmer Market Assistant</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    background:#f3f8f5;
+    color:#17251d;
+}
+
+header{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    background:linear-gradient(135deg,#075c35,#0a854b);
+    color:white;
+    padding:15px 5%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 3px 15px #0002;
+}
+
+.logo{
+    font-size:24px;
+    font-weight:bold;
+}
+
+.logo span{
+    color:#baf5c9;
+}
+
+.header-right{
+    display:flex;
+    gap:10px;
+    align-items:center;
+}
+
+header select{
+    padding:9px 12px;
+    border:0;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+nav{
+    background:white;
+    border-bottom:1px solid #dce8df;
+    display:flex;
+    gap:5px;
+    padding:8px 5%;
+    position:sticky;
+    top:66px;
+    z-index:900;
+    overflow-x:auto;
+}
+
+nav button{
+    background:transparent;
+    color:#31523f;
+    padding:11px 16px;
+    border-radius:9px;
+    white-space:nowrap;
+}
+
+nav button.active{
+    background:#e5f7eb;
+    color:#087443;
+}
+
+.hero{
+    background:white;
+    padding:55px 5%;
+}
+
+.hero h1{
+    color:#075c35;
+    font-size:clamp(35px,6vw,65px);
+    max-width:900px;
+}
+
+.hero p{
+    color:#5d6c63;
+    font-size:18px;
+    line-height:1.6;
+    max-width:750px;
+    margin:18px 0 25px;
+}
+
+button{
+    border:0;
+    padding:13px 20px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.primary{
+    background:#087443;
+    color:white;
+}
+
+.primary:hover{
+    background:#064f2f;
+}
+
+.container{
+    width:92%;
+    max-width:1200px;
+    margin:auto;
+}
+
+.page-section{
+    display:none;
+    padding:45px 0;
+}
+
+.page-section.active{
+    display:block;
+}
+
+.title{
+    margin-bottom:20px;
+}
+
+.title h2{
+    color:#075c35;
+}
+
+.title p{
+    color:#65746b;
+    margin-top:6px;
+}
+
+.search{
+    background:white;
+    margin-top:25px;
+    padding:25px;
+    border-radius:20px;
+    box-shadow:0 8px 30px #00000012;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
+}
+
+.field label{
+    display:block;
+    margin-bottom:7px;
+    font-size:13px;
+    font-weight:bold;
+    color:#52635a;
+}
+
+.field input,
+.field select{
+    width:100%;
+    padding:13px;
+    border:1px solid #d9e5dc;
+    background:#f7faf8;
+    border-radius:10px;
+    outline:none;
+}
+
+.field input:focus,
+.field select:focus{
+    border-color:#0a854b;
+}
+
+.search-btn{
+    width:100%;
+    margin-top:18px;
+    font-size:16px;
+}
+
+.notice{
+    margin-top:15px;
+    padding:12px;
+    border-radius:10px;
+    background:#fff8df;
+    color:#725900;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.dashboard-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:18px;
+}
+
+.stat-card{
+    background:white;
+    padding:22px;
+    border-radius:18px;
+    border:1px solid #e1ebe4;
+    box-shadow:0 5px 20px #0000000d;
+}
+
+.stat-icon{
+    font-size:30px;
+}
+
+.stat-card h3{
+    color:#075c35;
+    margin:12px 0 6px;
+}
+
+.stat-card p{
+    color:#708078;
+}
+
+.ai-card{
+    background:linear-gradient(135deg,#075c35,#0b8950);
+    color:white;
+    padding:25px;
+    border-radius:20px;
+    margin-bottom:25px;
+}
+
+.prediction{
+    font-size:38px;
+    font-weight:800;
+    margin:12px 0;
+}
+
+.prediction-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
+    margin-top:20px;
+}
+
+.prediction-box{
+    background:#ffffff18;
+    padding:15px;
+    border-radius:12px;
+}
+
+.prediction-box small{
+    display:block;
+    opacity:.8;
+    margin-bottom:6px;
+}
+
+.progress{
+    height:8px;
+    background:#ffffff33;
+    border-radius:20px;
+    overflow:hidden;
+    margin:12px 0;
+}
+
+.progress span{
+    display:block;
+    height:100%;
+    background:white;
+    width:0%;
+    transition:.5s;
+}
+
+.market-card{
+    background:white;
+    padding:22px;
+    border-radius:18px;
+    margin-bottom:18px;
+    box-shadow:0 5px 20px #0000000d;
+    border:1px solid #e1ebe4;
+}
+
+.market-card.best{
+    border:2px solid #18a558;
+}
+
+.market-head{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.rank{
+    width:42px;
+    height:42px;
+    background:#e5f7eb;
+    color:#087443;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    font-weight:bold;
+}
+
+.market-name{
+    flex:1;
+}
+
+.market-name h3{
+    color:#123b28;
+}
+
+.market-name small{
+    color:#708078;
+}
+
+.badge{
+    background:#e7f8ed;
+    color:#087443;
+    padding:7px 10px;
+    border-radius:20px;
+    font-size:10px;
+    font-weight:bold;
+}
+
+.details{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    gap:12px;
+    margin-top:18px;
+}
+
+.detail{
+    background:#f6faf7;
+    padding:13px;
+    border-radius:11px;
+}
+
+.detail small{
+    display:block;
+    color:#708078;
+    font-size:11px;
+    margin-bottom:6px;
+}
+
+.detail strong{
+    font-size:16px;
+}
+
+.source{
+    margin-top:15px;
+    color:#738078;
+    font-size:11px;
+    line-height:1.5;
+}
+
+.map-box{
+    background:white;
+    min-height:430px;
+    border-radius:20px;
+    padding:25px;
+    position:relative;
+    overflow:hidden;
+    border:1px solid #dfe9e2;
+}
+
+.map-background{
+    height:350px;
+    border-radius:15px;
+    background:linear-gradient(135deg,#dff2df,#bde4c5);
+    position:relative;
+}
+
+.map-road{
+    position:absolute;
+    height:8px;
+    background:#fff;
+    transform:rotate(-25deg);
+    width:120%;
+    left:-10%;
+}
+
+.map-road.r1{
+    top:30%;
+}
+
+.map-road.r2{
+    top:60%;
+    transform:rotate(20deg);
+}
+
+.mandi-pin{
+    position:absolute;
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    background:#087443;
+    color:white;
+    display:grid;
+    place-items:center;
+    border:4px solid white;
+    box-shadow:0 3px 12px #0003;
+    cursor:pointer;
+}
+
+.pin1{
+    left:25%;
+    top:30%;
+}
+
+.pin2{
+    left:55%;
+    top:45%;
+}
+
+.pin3{
+    left:75%;
+    top:25%;
+}
+
+.pin4{
+    left:45%;
+    top:70%;
+}
+
+.map-info{
+    margin-top:15px;
+    background:#eef7f1;
+    padding:15px;
+    border-radius:12px;
+}
+
+.buyers-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:18px;
+}
+
+.buyer-card{
+    background:white;
+    padding:22px;
+    border-radius:18px;
+    border:1px solid #e1ebe4;
+    box-shadow:0 5px 20px #0000000d;
+}
+
+.buyer-icon{
+    font-size:35px;
+}
+
+.buyer-card h3{
+    color:#075c35;
+    margin:10px 0;
+}
+
+.buyer-card p{
+    color:#68766e;
+    line-height:1.6;
+}
+
+.buyer-tag{
+    display:inline-block;
+    margin-top:12px;
+    padding:6px 10px;
+    border-radius:20px;
+    background:#e6f7eb;
+    color:#087443;
+    font-size:11px;
+    font-weight:bold;
+}
+
+.admin-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:18px;
+}
+
+.admin-card{
+    background:white;
+    padding:22px;
+    border-radius:18px;
+    border:1px solid #e1ebe4;
+}
+
+.admin-card h3{
+    color:#075c35;
+    margin-bottom:12px;
+}
+
+.admin-row{
+    display:flex;
+    justify-content:space-between;
+    padding:10px 0;
+    border-bottom:1px solid #edf1ee;
+    font-size:14px;
+}
+
+.admin-row:last-child{
+    border-bottom:0;
+}
+
+.admin-row span{
+    color:#708078;
+}
+
+.status{
+    color:#087443;
+    font-weight:bold;
+}
+
+.voice{
+    background:white;
+    padding:25px;
+    border-radius:20px;
+    box-shadow:0 5px 20px #0000000d;
+}
+
+.voice-result{
+    display:none;
+    margin-top:15px;
+    padding:15px;
+    background:#eef7f1;
+    border-radius:10px;
+}
+
+footer{
+    background:#063b24;
+    color:#cde6d6;
+    padding:25px;
+    text-align:center;
+    line-height:1.7;
+    margin-top:30px;
+}
+
+
+/* ===== ENHANCED UI ===== */
+html{scroll-behavior:smooth}
+
+body{
+    background:
+      radial-gradient(circle at 10% 10%, #e5f8eb 0, transparent 28%),
+      radial-gradient(circle at 90% 15%, #dff5e8 0, transparent 24%),
+      #f3f8f5;
+}
+
+header{
+    backdrop-filter:blur(14px);
+    background:linear-gradient(135deg,rgba(4,83,47,.97),rgba(10,145,78,.97));
+}
+
+.logo{
+    letter-spacing:.3px;
+    text-shadow:0 2px 10px #0003;
+}
+
+nav{
+    box-shadow:0 5px 20px #0000000b;
+    scrollbar-width:none;
+}
+
+nav::-webkit-scrollbar{display:none}
+
+nav button{
+    border:1px solid transparent;
+    transition:.25s ease;
+}
+
+nav button:hover{
+    background:#f0faf3;
+    transform:translateY(-1px);
+}
+
+.hero{
+    position:relative;
+    overflow:hidden;
+    background:
+      linear-gradient(135deg,rgba(255,255,255,.97),rgba(235,249,239,.94));
+    border-bottom:1px solid #dcebe1;
+}
+
+.hero:before,.hero:after{
+    content:"";
+    position:absolute;
+    border-radius:50%;
+    pointer-events:none;
+    opacity:.45;
+}
+
+.hero:before{
+    width:260px;height:260px;
+    right:-90px;top:-100px;
+    background:#bcefcf;
+}
+
+.hero:after{
+    width:180px;height:180px;
+    right:180px;bottom:-100px;
+    background:#d8f6e1;
+}
+
+.hero .container{position:relative;z-index:2}
+
+.hero h1{
+    line-height:1.05;
+    letter-spacing:-1.5px;
+}
+
+.hero-badges{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.hero-badges span{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:8px 12px;
+    border-radius:999px;
+    background:#ffffffc9;
+    border:1px solid #cfe8d7;
+    color:#17633f;
+    font-size:12px;
+    font-weight:700;
+    box-shadow:0 5px 15px #00000008;
+}
+
+.primary{
+    box-shadow:0 8px 20px #08744335;
+    transition:.25s ease;
+}
+
+.primary:hover{
+    transform:translateY(-2px);
+    box-shadow:0 12px 25px #08744345;
+}
+
+.page-section.active{
+    animation:fadeUp .35s ease both;
+}
+
+@keyframes fadeUp{
+    from{opacity:0;transform:translateY(10px)}
+    to{opacity:1;transform:translateY(0)}
+}
+
+.stat-card,.market-card,.buyer-card,.admin-card,.search,.voice,.map-box{
+    transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;
+}
+
+.stat-card:hover,.market-card:hover,.buyer-card:hover,.admin-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 12px 32px #00000012;
+}
+
+.stat-icon{
+    width:52px;height:52px;
+    display:grid;place-items:center;
+    border-radius:15px;
+    background:linear-gradient(135deg,#e5f7eb,#d4f1df);
+}
+
+.field input,.field select{
+    transition:.2s ease;
+}
+
+.field input:hover,.field select:hover{
+    border-color:#a8cdb4;
+}
+
+.field input:focus,.field select:focus{
+    box-shadow:0 0 0 4px #0a854b18;
+}
+
+.weight-tools{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin-top:8px;
+}
+
+.weight-tools button{
+    padding:7px 9px;
+    border-radius:8px;
+    background:#eef8f1;
+    color:#087443;
+    border:1px solid #d4eadb;
+    font-size:11px;
+    transition:.2s ease;
+}
+
+.weight-tools button:hover{
+    background:#dff3e5;
+    transform:translateY(-1px);
+}
+
+.weight-preview{
+    margin-top:8px;
+    padding:9px 11px;
+    border-radius:9px;
+    background:linear-gradient(90deg,#f1faf4,#f8fbf9);
+    color:#38634a;
+    font-size:12px;
+    font-weight:600;
+}
+
+.ai-card{
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 12px 35px #075c3530;
+}
+
+.ai-card:after{
+    content:"🤖";
+    position:absolute;
+    right:25px;
+    top:18px;
+    font-size:70px;
+    opacity:.08;
+}
+
+.prediction-box{
+    border:1px solid #ffffff20;
+    transition:.2s ease;
+}
+
+.prediction-box:hover{
+    background:#ffffff25;
+    transform:translateY(-2px);
+}
+
+.market-card.best{
+    box-shadow:0 10px 28px #18a55822;
+    position:relative;
+    overflow:hidden;
+}
+
+.market-card.best:before{
+    content:"BEST";
+    position:absolute;
+    right:-30px;
+    top:12px;
+    width:120px;
+    text-align:center;
+    padding:5px;
+    background:#18a558;
+    color:white;
+    font-size:10px;
+    font-weight:800;
+    transform:rotate(35deg);
+}
+
+.map-background{
+    background:
+      linear-gradient(135deg,#dff2df,#bde4c5),
+      repeating-linear-gradient(45deg,#ffffff18 0 2px,transparent 2px 18px);
+}
+
+.mandi-pin{
+    transition:.25s ease;
+}
+
+.mandi-pin:hover{
+    transform:scale(1.12);
+}
+
+footer{
+    background:
+      radial-gradient(circle at 20% 0,#0a854b55,transparent 30%),
+      #063b24;
+}
+
+.api-message{padding:12px 15px;border-radius:12px;margin:10px 0;background:#fff7df;color:#765600;border:1px solid #f0d77a}.api-message.ok{background:#edf9f1;color:#087443;border-color:#b9e2c7}.api-message.warn{background:#fff1f0;color:#9b2c25;border-color:#efbbb6}
+@media(max-width:600px){
+    .hero-badges span{font-size:10px;padding:7px 9px}
+    .weight-tools button{flex:1 1 calc(50% - 6px)}
+}
+
+@media(max-width:600px){
+
+    header{
+        padding:13px 4%;
+    }
+
+    .logo{
+        font-size:19px;
+    }
+
+    nav{
+        top:59px;
+    }
+
+    .hero{
+        padding:40px 5%;
+    }
+
+    .prediction{
+        font-size:30px;
+    }
+
+    .badge{
+        display:none;
+    }
+
+    .market-head{
+        align-items:flex-start;
+    }
+}
+
+/* =========================================================
+   HACKATHON UPGRADE UI
+========================================================= */
+.feature-nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin-left:8px;
+}
+.section-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:18px;
+}
+.up-card{
+    background:rgba(255,255,255,.96);
+    border:1px solid #dfeae2;
+    border-radius:20px;
+    padding:22px;
+    box-shadow:0 8px 28px #0000000c;
+}
+.up-card h3{color:#075c35;margin-bottom:10px}
+.up-card p{color:#65746b;line-height:1.6}
+.tool-title{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:15px;
+}
+.tool-title h2{color:#075c35}
+.live-dot{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:11px;
+    font-weight:800;
+    color:#087443;
+    background:#e7f8ed;
+    padding:7px 10px;
+    border-radius:999px;
+}
+.live-dot i{
+    width:8px;height:8px;border-radius:50%;
+    background:#18a558;
+    animation:pulseDot 1.2s infinite;
+}
+@keyframes pulseDot{50%{opacity:.35;transform:scale(.75)}}
+
+.price-table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:12px;
+    overflow:hidden;
+}
+.price-table th,.price-table td{
+    padding:12px 10px;
+    text-align:left;
+    border-bottom:1px solid #edf2ee;
+    font-size:13px;
+}
+.price-table th{
+    background:#eef8f1;
+    color:#31523f;
+}
+.price-table tr.best-row{
+    background:#f0fbf4;
+    font-weight:700;
+}
+.price-table .high{color:#087443;font-weight:800}
+.price-table .low{color:#a34c00}
+.refresh-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:12px;
+}
+.mini-btn{
+    padding:9px 12px;
+    background:#eef8f1;
+    color:#087443;
+    border:1px solid #d4eadb;
+    border-radius:9px;
+}
+.chart-wrap{
+    height:260px;
+    margin-top:15px;
+    border:1px solid #e3ece6;
+    border-radius:15px;
+    padding:10px;
+    background:#fbfdfb;
+}
+#priceChart{width:100%;height:100%}
+.kpi-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:12px;
+}
+.kpi{
+    padding:16px;
+    border-radius:15px;
+    background:#f4faf6;
+    border:1px solid #e1eee5;
+}
+.kpi small{display:block;color:#718078;margin-bottom:6px}
+.kpi strong{font-size:20px;color:#075c35}
+.profit-result{
+    margin-top:18px;
+    padding:18px;
+    border-radius:16px;
+    background:linear-gradient(135deg,#e9f8ee,#f8fcf9);
+    border:1px solid #cfe8d7;
+}
+.profit-main{
+    font-size:32px;
+    font-weight:900;
+    color:#087443;
+    margin:6px 0;
+}
+.slider-value{
+    display:flex;
+    justify-content:space-between;
+    font-size:12px;
+    color:#607068;
+    margin-top:5px;
+}
+input[type=range]{width:100%;accent-color:#087443}
+.weather-card{
+    background:linear-gradient(135deg,#075c35,#0c8c52);
+    color:white;
+    border-radius:20px;
+    padding:24px;
+    position:relative;
+    overflow:hidden;
+}
+.weather-temp{font-size:48px;font-weight:900}
+.weather-meta{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    margin-top:18px;
+}
+.weather-meta div{
+    background:#ffffff18;
+    padding:12px;
+    border-radius:12px;
+}
+.weather-meta small{display:block;opacity:.75}
+.chat-box{
+    height:360px;
+    overflow:auto;
+    padding:15px;
+    background:#f7faf8;
+    border-radius:15px;
+    border:1px solid #e0ebe3;
+}
+.chat-msg{
+    max-width:82%;
+    padding:11px 13px;
+    margin:8px 0;
+    border-radius:14px;
+    line-height:1.5;
+    font-size:13px;
+}
+.chat-msg.bot{background:#e5f7eb;color:#174c31}
+.chat-msg.user{background:#087443;color:white;margin-left:auto}
+.chat-input{
+    display:flex;
+    gap:8px;
+    margin-top:10px;
+}
+.chat-input input{flex:1}
+.alert-item{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    padding:14px;
+    border:1px solid #e1ebe4;
+    border-radius:14px;
+    background:white;
+    margin-bottom:10px;
+}
+.alert-icon{
+    width:38px;height:38px;border-radius:12px;
+    display:grid;place-items:center;background:#eef8f1;
+}
+.recommend-box{
+    margin-top:15px;
+    padding:15px;
+    border-radius:14px;
+    background:#fff8df;
+    color:#6c5700;
+}
+.badge-blue{
+    display:inline-block;
+    background:#edf5ff;
+    color:#245a91;
+    padding:6px 9px;
+    border-radius:999px;
+    font-size:10px;
+    font-weight:800;
+}
+@media(max-width:700px){
+    .feature-nav{margin-left:0}
+    .price-table{font-size:12px}
+    .price-table th,.price-table td{padding:9px 6px}
+    .weather-meta{grid-template-columns:1fr}
+    .chat-msg{max-width:92%}
+}
+
+
+/* ===== Farmer Setu Demo Authentication ===== */
+#authScreen{
+  position:fixed; inset:0; z-index:99999; display:flex; align-items:center; justify-content:center;
+  min-height:100vh; padding:20px; background:linear-gradient(135deg,#0b5d3b,#198754 55%,#e9f7ef);
+}
+.auth-card{
+  width:min(440px,100%); background:#fff; border-radius:24px; padding:30px;
+  box-shadow:0 20px 60px rgba(0,0,0,.22); animation:authIn .35s ease;
+}
+@keyframes authIn{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:none}}
+.auth-logo{font-size:32px;font-weight:800;color:#0b5d3b;text-align:center;margin-bottom:6px}
+.auth-sub{text-align:center;color:#667085;margin-bottom:22px}
+.auth-tabs{display:flex;gap:8px;background:#f2f4f7;padding:5px;border-radius:12px;margin-bottom:20px}
+.auth-tab{flex:1;border:0;background:transparent;padding:11px;border-radius:9px;font-weight:700;cursor:pointer}
+.auth-tab.active{background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.08);color:#0b5d3b}
+.auth-field{margin-bottom:14px}
+.auth-field label{display:block;font-size:14px;font-weight:700;margin-bottom:6px;color:#344054}
+.auth-field input,.auth-field select{
+  width:100%;padding:12px 13px;border:1px solid #d0d5dd;border-radius:10px;
+  font-size:15px;outline:none;background:#fff
+}
+.auth-field input:focus,.auth-field select:focus{border-color:#198754;box-shadow:0 0 0 3px rgba(25,135,84,.12)}
+.password-wrap{position:relative}.password-wrap input{padding-right:70px}
+.pass-toggle{position:absolute;right:8px;top:7px;border:0;background:#f2f4f7;border-radius:7px;padding:7px 9px;cursor:pointer}
+.auth-btn{
+  width:100%;border:0;border-radius:11px;padding:13px;background:#0b5d3b;color:#fff;
+  font-size:16px;font-weight:800;cursor:pointer;margin-top:4px
+}
+.auth-btn:hover{background:#08482e}
+.auth-msg{min-height:20px;margin:10px 0 0;font-size:14px;text-align:center;font-weight:600}
+.auth-note{font-size:12px;color:#667085;text-align:center;margin-top:16px;line-height:1.5}
+#registerForm{display:none}
+#appShell{display:none}
+.logout-btn{cursor:pointer}
+
+</style>
+</head>
+
+<body>
+<div id="authScreen">
+  <div class="auth-card">
+    <div class="auth-logo">🌾 Farmer Setu</div>
+    <div class="auth-sub">Smart Farmer Market Assistant</div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="loginTab" type="button">Login</button>
+      <button class="auth-tab" id="registerTab" type="button">Sign Up</button>
+    </div>
+
+    <form id="loginForm">
+      <div class="auth-field">
+        <label for="loginId">Mobile Number / Email</label>
+        <input id="loginId" type="text" placeholder="Enter mobile number or email" required>
+      </div>
+      <div class="auth-field">
+        <label for="loginPassword">Password</label>
+        <div class="password-wrap">
+          <input id="loginPassword" type="password" placeholder="Enter password" required>
+          <button class="pass-toggle" type="button" data-target="loginPassword">Show</button>
+        </div>
+      </div>
+      <button class="auth-btn" type="submit">Login to Farmer Setu</button>
+      <div class="auth-msg" id="loginMsg"></div>
+    </form>
+
+    <form id="registerForm">
+      <div class="auth-field">
+        <label for="regName">Farmer Name</label>
+        <input id="regName" type="text" placeholder="Enter your name" required>
+      </div>
+      <div class="auth-field">
+        <label for="regMobile">Mobile Number</label>
+        <input id="regMobile" type="tel" inputmode="numeric" maxlength="10" placeholder="10-digit mobile number" required>
+      </div>
+      <div class="auth-field">
+        <label for="regEmail">Email (optional)</label>
+        <input id="regEmail" type="email" placeholder="farmer@example.com">
+      </div>
+      <div class="auth-field">
+        <label for="regLanguage">Preferred Language</label>
+        <select id="regLanguage">
+          <option>English</option><option>Marathi</option><option>Hindi</option>
+          <option>Gujarati</option><option>Bengali</option><option>Tamil</option>
+          <option>Telugu</option><option>Kannada</option><option>Punjabi</option>
+        </select>
+      </div>
+      <div class="auth-field">
+        <label for="regPassword">Password</label>
+        <div class="password-wrap">
+          <input id="regPassword" type="password" minlength="6" placeholder="Minimum 6 characters" required>
+          <button class="pass-toggle" type="button" data-target="regPassword">Show</button>
+        </div>
+      </div>
+      <div class="auth-field">
+        <label for="regConfirm">Confirm Password</label>
+        <div class="password-wrap">
+          <input id="regConfirm" type="password" placeholder="Re-enter password" required>
+          <button class="pass-toggle" type="button" data-target="regConfirm">Show</button>
+        </div>
+      </div>
+      <button class="auth-btn" type="submit">Create Account</button>
+      <div class="auth-msg" id="registerMsg"></div>
+    </form>
+
+    <div class="auth-note">
+      Demo login for your college/hackathon website. Accounts are stored in this browser only.
+      For a real production app, use Firebase, Supabase, or a secure backend.
+    </div>
+  </div>
+</div>
+
+<div id="appShell">
+
+
+<header>
+
+<div class="logo">
+🌾 <span>Farmer Setu</span>
+</div>
+
+<div class="header-right">
+
+<select id="language" onchange="changeLanguage()">
+<option value="en">English</option>
+<option value="mr">मराठी</option>
+<option value="hi">हिन्दी</option>
+<option value="gu">ગુજરાતી</option>
+<option value="bn">বাংলা</option>
+<option value="ta">தமிழ்</option>
+<option value="te">తెలుగు</option>
+<option value="kn">ಕನ್ನಡ</option>
+<option value="pa">ਪੰਜਾਬੀ</option>
+</select>
+
+</div>
+
+</header>
+
+
+<nav>
+
+<button class="nav-btn active"
+onclick="showPage('dashboard',this)"
+data-key="navDashboard">
+🏠 Dashboard
+</button>
+
+<button class="nav-btn"
+onclick="showPage('predictionPage',this)"
+data-key="navPrediction">
+🤖 AI Predictions
+</button>
+
+<button class="nav-btn"
+onclick="showPage('mapPage',this)"
+data-key="navMap">
+🗺️ Mandi Map
+</button>
+
+<button class="nav-btn"
+onclick="showPage('buyersPage',this)"
+data-key="navBuyers">
+👨‍🌾 Buyers
+</button>
+
+<button class="nav-btn"
+onclick="showPage('adminPage',this)"
+data-key="navAdmin">
+⚙️ Admin Details
+</button>
+
+
+<button class="nav-btn" onclick="showPage('marketPage',this)">📊 Market Prices</button>
+<button class="nav-btn" onclick="showPage('profitPage',this)">💰 Profit Calculator</button>
+<button class="nav-btn" onclick="showPage('weatherPage',this)">🌦️ Weather</button>
+<button class="nav-btn" onclick="showPage('chatPage',this)">💬 AI Assistant</button>
+<button class="nav-btn" onclick="showPage('alertsPage',this)">🔔 Alerts</button>
+
+</nav>
+
+
+<section class="hero">
+
+<div class="container">
+
+<h1 id="heroTitle">
+Find the Best Mandi for Your Crop
+</h1>
+
+<p id="heroText">
+Farmer Setu compares mandi prices,
+quantity and expected revenue to help
+farmers make better selling decisions.
+</p>
+
+<button
+class="primary"
+onclick="goPrediction()"
+id="heroButton">
+
+🔎 FIND BEST MARKET
+
+</button>
+
+</div>
+
+</section>
+
+
+<div class="container">
+
+
+<!-- DASHBOARD -->
+
+<section id="dashboard" class="page-section active">
+
+<div class="title">
+
+<h2 id="dashboardTitle">
+🏠 Farmer Dashboard
+</h2>
+
+<p id="dashboardText">
+Quick overview of your crop market information.
+</p>
+
+</div>
+
+
+<div class="dashboard-grid">
+
+<div class="stat-card">
+
+<div class="stat-icon">🌾</div>
+
+<h3 id="dashCrop">Onion</h3>
+
+<p id="selectedCropText">Selected Crop</p>
+
+</div>
+
+
+<div class="stat-card">
+
+<div class="stat-icon">📍</div>
+
+<h3 id="dashLocation">Pune</h3>
+
+<p id="selectedDistrictText">Selected District</p>
+
+</div>
+
+
+<div class="stat-card">
+
+<div class="stat-icon">💰</div>
+
+<h3 id="dashPrice">₹—</h3>
+
+<p id="bestPriceText">Best Modal Price</p>
+
+</div>
+
+
+<div class="stat-card">
+
+<div class="stat-icon">📈</div>
+
+<h3 id="dashRevenue">₹—</h3>
+
+<p id="estimatedRevenueText">Estimated Revenue</p>
+
+</div>
+
+</div>
+
+
+<br>
+
+
+<div class="search">
+
+<div class="grid">
+
+
+<div class="field">
+
+<label id="stateLabel">State</label>
+
+<select id="state"></select>
+
+</div>
+
+
+<div class="field">
+
+<label id="districtLabel">District</label>
+
+<select id="district"></select>
+
+</div>
+
+
+<div class="field">
+
+<label id="cropLabel">Crop</label>
+
+<select id="crop"></select>
+
+</div>
+
+
+<div class="field">
+
+<label id="quantityLabel">Quantity (kg)</label>
+
+<input
+id="quantity"
+type="number"
+min="1"
+value="1000"
+>
+
+</div>
+
+
+<div class="field">
+
+<label id="locationLabel">Farmer Location</label>
+
+<input id="location" value="Pune">
+
+</div>
+
+</div>
+
+
+<button
+class="primary search-btn"
+onclick="findMarkets()"
+id="findButton">
+
+🔎 FIND BEST MARKET
+
+</button>
+
+
+<div class="notice">
+    <b>🔑 API Setup:</b> Put your personal data.gov.in API key into <code>DATA_GOV_API_KEY</code> near the top of the JavaScript. For a public production website, move the key to a backend/serverless function so visitors cannot see it.
+</div>
+
+<div class="notice">
+
+⚠ <b id="demoDataLabel">Demo data:</b>
+
+<span id="demoDataText">
+This college-project version uses sample mandi
+prices and does not connect to a live Government API.
+</span>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- AI PREDICTION -->
+
+<section id="predictionPage" class="page-section">
+
+<div class="title">
+
+<h2 id="predictionTitlePage">
+🤖 AI Price Predictions
+</h2>
+
+<p id="predictionTextPage">
+Prediction changes according to selected state,
+district, crop and quantity.
+</p>
+
+</div>
+
+
+<div class="ai-card">
+
+<h3 id="predictionMarketTitle">
+🌾 Select crop and market
+</h3>
+
+<div class="prediction" id="prediction">
+₹—
+</div>
+
+<p id="predictionInfo">
+Select your state, district and crop,
+then search the market.
+</p>
+
+
+<div class="progress">
+<span id="confidenceBar"></span>
+</div>
+
+<strong id="confidence">
+Confidence: —
+</strong>
+
+
+<div class="prediction-grid">
+
+<div class="prediction-box">
+<small id="currentModalText">Current Modal</small>
+<strong id="aiModal">₹—</strong>
+</div>
+
+
+<div class="prediction-box">
+<small id="expectedPriceText">AI Expected Price</small>
+<strong id="aiExpected">₹—</strong>
+</div>
+
+
+<div class="prediction-box">
+<small id="expectedRevenueText">Expected Revenue</small>
+<strong id="aiRevenue">₹—</strong>
+</div>
+
+
+<div class="prediction-box">
+<small id="marketText">Market</small>
+<strong id="aiMarket">—</strong>
+</div>
+
+</div>
+
+</div>
+
+
+<h2
+id="recommendedTitle"
+style="margin-bottom:20px;color:#075c35;">
+
+📊 Recommended Mandis
+
+</h2>
+
+
+<div id="apiStatus" style="margin:12px 0;font-weight:700;color:#075c35"></div>
+<div id="apiMessage" class="api-message" style="display:none"></div>
+<div id="results">
+
+<div class="market-card">
+
+<h3 id="readyTitle">
+🌱 Ready to find a market?
+</h3>
+
+<p class="source" id="readyText">
+Select your state, district, crop and quantity,
+then press Find Best Market.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- MAP -->
+
+<section id="mapPage" class="page-section">
+
+<div class="title">
+
+<h2 id="mapPageTitle">
+🗺️ Mandi Map
+</h2>
+
+<p id="mapPageText">
+Demo map showing mandi locations for the
+currently selected district.
+</p>
+
+</div>
+
+
+<div class="map-box">
+
+<div class="map-background">
+
+<div class="map-road r1"></div>
+<div class="map-road r2"></div>
+
+<div class="mandi-pin pin1"
+onclick="mapMandiClick(0)">
+📍
+</div>
+
+<div class="mandi-pin pin2"
+onclick="mapMandiClick(1)">
+📍
+</div>
+
+<div class="mandi-pin pin3"
+onclick="mapMandiClick(2)">
+📍
+</div>
+
+<div class="mandi-pin pin4"
+onclick="mapMandiClick(3)">
+📍
+</div>
+
+</div>
+
+
+<div class="map-info">
+
+<strong id="mapTitle">
+📍 Selected Location: Pune
+</strong>
+
+<p id="mapText"
+style="margin-top:7px;color:#65746b;">
+Mandi locations are demo locations
+for the college project.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- BUYERS -->
+
+<section id="buyersPage" class="page-section">
+
+<div class="title">
+
+<h2 id="buyersTitle">
+👨‍🌾 Buyers
+</h2>
+
+<p id="buyersText">
+Potential buyers for different agricultural crops.
+</p>
+
+</div>
+
+
+<div class="buyers-grid">
+
+
+<div class="buyer-card">
+
+<div class="buyer-icon">🏪</div>
+
+<h3 id="buyer1Title">
+FreshMart Agro
+</h3>
+
+<p id="buyer1Text">
+Bulk buyer for onion, tomato and potato.
+Suitable for farmers with medium and large
+quantities.
+</p>
+
+<span class="buyer-tag" id="buyer1Tag">
+VEGETABLES
+</span>
+
+</div>
+
+
+<div class="buyer-card">
+
+<div class="buyer-icon">🏭</div>
+
+<h3 id="buyer2Title">
+Agro Processing Ltd.
+</h3>
+
+<p id="buyer2Text">
+Procures soybean, maize, wheat and gram
+for processing requirements.
+</p>
+
+<span class="buyer-tag" id="buyer2Tag">
+GRAINS
+</span>
+
+</div>
+
+
+<div class="buyer-card">
+
+<div class="buyer-icon">🌾</div>
+
+<h3 id="buyer3Title">
+Maharashtra Farm Traders
+</h3>
+
+<p id="buyer3Text">
+Agricultural commodity trader purchasing
+multiple crops from farmers.
+</p>
+
+<span class="buyer-tag" id="buyer3Tag">
+TRADER
+</span>
+
+</div>
+
+
+<div class="buyer-card">
+
+<div class="buyer-icon">🚚</div>
+
+<h3 id="buyer4Title">
+Direct Market Buyer
+</h3>
+
+<p id="buyer4Text">
+Local buyer for farmers who want to
+sell produce directly.
+</p>
+
+<span class="buyer-tag" id="buyer4Tag">
+DIRECT BUYER
+</span>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ADMIN -->
+
+<section id="adminPage" class="page-section">
+
+<div class="title">
+
+<h2 id="adminTitle">
+⚙️ Admin Details
+</h2>
+
+<p id="adminText">
+System and project administration information.
+</p>
+
+</div>
+
+
+<div class="admin-grid">
+
+
+<div class="admin-card">
+
+<h3 id="systemStatsTitle">
+📊 System Statistics
+</h3>
+
+<div class="admin-row">
+<span id="totalStatesText">Total States</span>
+<strong id="adminStates">3</strong>
+</div>
+
+<div class="admin-row">
+<span id="totalDistrictsText">Total Districts</span>
+<strong id="adminDistricts">—</strong>
+</div>
+
+<div class="admin-row">
+<span id="totalCropsText">Total Crops</span>
+<strong id="adminCrops">10</strong>
+</div>
+
+<div class="admin-row">
+<span id="totalMarketsText">Total Markets</span>
+<strong id="adminMarkets">—</strong>
+</div>
+
+</div>
+
+
+<div class="admin-card">
+
+<h3 id="systemStatusTitle">
+🔐 System Status
+</h3>
+
+<div class="admin-row">
+<span id="websiteText">Website</span>
+<strong class="status" id="onlineText">Online</strong>
+</div>
+
+<div class="admin-row">
+<span id="aiModuleText">AI Module</span>
+<strong class="status" id="activeText">Active</strong>
+</div>
+
+<div class="admin-row">
+<span id="marketDatabaseText">Market Database</span>
+<strong class="status" id="demoText">Demo</strong>
+</div>
+
+<div class="admin-row">
+<span id="governmentApiText">Government API</span>
+<strong style="color:#b06b00;" id="notConnectedText">
+Not Connected
+</strong>
+</div>
+
+</div>
+
+
+<div class="admin-card">
+
+<h3 id="projectDetailsTitle">
+👨‍💻 Project Details
+</h3>
+
+<div class="admin-row">
+<span id="projectText">Project</span>
+<strong>Farmer Setu</strong>
+</div>
+
+<div class="admin-row">
+<span id="versionText">Version</span>
+<strong>2.0 Hackathon Demo</strong>
+</div>
+
+<div class="admin-row">
+<span id="technologyText">Technology</span>
+<strong>HTML/CSS/JS</strong>
+</div>
+
+<div class="admin-row">
+<span id="dataTypeText">Data Type</span>
+<strong id="sampleDataText">Sample Data</strong>
+</div>
+
+</div>
+
+</div>
+
+
+<br>
+
+
+<div class="notice">
+
+⚠ <b id="importantText">Important:</b>
+
+<span id="importantDescription">
+This is a college-project demonstration.
+Mandi prices, buyers and map locations are
+sample values and should not be treated as
+live Government market information.
+</span>
+
+</div>
+
+</section>
+
+
+<!-- VOICE -->
+
+<section id="voicePage" class="page-section">
+
+<div class="title">
+
+<h2 id="voiceTitle">
+🎙 Farmer Voice Assistant
+</h2>
+
+<p id="voiceText">
+Ask your agricultural market question using voice.
+</p>
+
+</div>
+
+
+<div class="voice">
+
+<button
+class="primary"
+onclick="startVoice()"
+id="voiceButton">
+
+🎙 Talk to AI
+
+</button>
+
+
+<div id="voiceResult" class="voice-result">
+
+<strong id="voiceStatus">
+Listening...
+</strong>
+
+<p id="farmerSpeech" style="margin-top:10px"></p>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- =========================================================
+     MARKET PRICES
+========================================================= -->
+<section id="marketPage" class="page-section">
+  <div class="title">
+    <div class="tool-title">
+      <div>
+        <h2>📊 Live-Style Market Price Comparison</h2>
+        <p>Compare sample mandi prices and identify the best selling option.</p>
+      </div>
+      <span class="live-dot"><i></i> DEMO LIVE</span>
+    </div>
+  </div>
+
+  <div class="up-card">
+    <div class="refresh-row">
+      <div>
+        <strong id="marketSummary">Select a crop and quantity on the Dashboard.</strong>
+        <div style="font-size:12px;color:#748078;margin-top:5px" id="lastUpdated">Last updated: —</div>
+      </div>
+      <button class="mini-btn" onclick="refreshDemoPrices()">🔄 Refresh Prices</button>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="price-table">
+        <thead>
+          <tr>
+            <th>Market</th><th>Price / qtl</th><th>Revenue</th><th>Transport</th><th>Net Income</th>
+          </tr>
+        </thead>
+        <tbody id="marketTableBody">
+          <tr><td colspan="5">Search a market first.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="recommend-box" id="marketRecommendation">⭐ Recommendation will appear here.</div>
+  </div>
+
+  <div class="up-card" style="margin-top:18px">
+    <div class="tool-title">
+      <h3>📈 7-Day Price Trend</h3>
+      <span class="badge-blue">Demo prediction data</span>
+    </div>
+    <div class="chart-wrap"><canvas id="priceChart"></canvas></div>
+  </div>
+</section>
+
+<!-- =========================================================
+     PROFIT CALCULATOR
+========================================================= -->
+<section id="profitPage" class="page-section">
+  <div class="title">
+    <h2>💰 Farmer Profit Calculator</h2>
+    <p>Estimate revenue after transport and operating costs.</p>
+  </div>
+
+  <div class="section-grid">
+    <div class="up-card">
+      <h3>🧮 Enter Your Details</h3>
+      <div class="field" style="margin-top:12px">
+        <label>Quantity (kg)</label>
+        <input id="profitQty" type="number" min="1" value="1000" oninput="calculateProfit()">
+      </div>
+      <div class="field" style="margin-top:12px">
+        <label>Sale Price (₹/quintal)</label>
+        <input id="profitPrice" type="number" min="1" value="2500" oninput="calculateProfit()">
+      </div>
+      <div class="field" style="margin-top:12px">
+        <label>Distance to Market (km)</label>
+        <input id="profitDistance" type="number" min="0" value="80" oninput="calculateProfit()">
+      </div>
+      <div class="field" style="margin-top:12px">
+        <label>Transport Cost (₹/km)</label>
+        <input id="profitRate" type="number" min="0" step="0.5" value="35" oninput="calculateProfit()">
+      </div>
+      <div class="field" style="margin-top:12px">
+        <label>Other Costs (₹)</label>
+        <input id="profitOther" type="number" min="0" value="1000" oninput="calculateProfit()">
+      </div>
+    </div>
+
+    <div class="up-card">
+      <h3>📌 Estimated Result</h3>
+      <div class="profit-result">
+        <small>Estimated Net Profit</small>
+        <div class="profit-main" id="profitMain">₹—</div>
+        <div class="kpi-grid">
+          <div class="kpi"><small>Gross Revenue</small><strong id="grossRevenue">₹—</strong></div>
+          <div class="kpi"><small>Transport</small><strong id="transportCost">₹—</strong></div>
+          <div class="kpi"><small>Other Costs</small><strong id="otherCost">₹—</strong></div>
+          <div class="kpi"><small>Profit / kg</small><strong id="profitPerKg">₹—</strong></div>
+        </div>
+      </div>
+      <div class="recommend-box" id="profitAdvice">Enter details to calculate your estimated profit.</div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     WEATHER
+========================================================= -->
+<section id="weatherPage" class="page-section">
+  <div class="title">
+    <h2>🌦️ Farmer Weather Assistant</h2>
+    <p>Demo weather information to support transport and selling decisions.</p>
+  </div>
+
+  <div class="section-grid">
+    <div class="weather-card">
+      <div style="font-size:14px;opacity:.8" id="weatherLocation">Pune, Maharashtra</div>
+      <div class="weather-temp" id="weatherTemp">28°C</div>
+      <div id="weatherCondition">Partly Cloudy</div>
+      <div class="weather-meta">
+        <div><small>💧 Humidity</small><strong id="humidity">64%</strong></div>
+        <div><small>💨 Wind</small><strong id="wind">14 km/h</strong></div>
+        <div><small>🌧️ Rain Chance</small><strong id="rainChance">25%</strong></div>
+      </div>
+    </div>
+
+    <div class="up-card">
+      <h3>🌾 Selling Advice</h3>
+      <p id="weatherAdvice" style="margin-top:10px">
+        Check the forecast before transporting your produce.
+      </p>
+      <button class="primary" style="margin-top:15px" onclick="updateWeather()">🔄 Update Weather</button>
+      <div class="notice" style="margin-top:15px">
+        ⚠ Weather values are demo values in this offline prototype. Connect a weather API for live data.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     AI ASSISTANT
+========================================================= -->
+<section id="chatPage" class="page-section">
+  <div class="title">
+    <h2>💬 Farmer Setu Farmer Assistant</h2>
+    <p>Ask questions about prices, profit, weight, transport or selling strategy.</p>
+  </div>
+
+  <div class="up-card">
+    <div class="chat-box" id="chatBox">
+      <div class="chat-msg bot">👋 Namaste! I am Farmer Setu. Ask me: “Where should I sell my onion?” or “What is my estimated profit?”</div>
+    </div>
+    <div class="chat-input">
+      <input id="chatInput" placeholder="Type your question..." onkeydown="if(event.key==='Enter')sendChat()">
+      <button class="primary" onclick="sendChat()">Send</button>
+      <button class="mini-btn" onclick="startChatVoice()">🎙️</button>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     ALERTS
+========================================================= -->
+<section id="alertsPage" class="page-section">
+  <div class="title">
+    <h2>🔔 Farmer Price Alerts</h2>
+    <p>Demo alerts that help farmers notice useful market movements.</p>
+  </div>
+
+  <div class="section-grid">
+    <div class="up-card">
+      <h3>🔔 Create Alert</h3>
+      <div class="field" style="margin-top:12px">
+        <label>Target Price (₹/quintal)</label>
+        <input id="alertTarget" type="number" value="3000" min="1">
+      </div>
+      <button class="primary" style="margin-top:15px" onclick="createPriceAlert()">➕ Create Price Alert</button>
+      <div id="alertCreated" class="notice" style="display:none"></div>
+    </div>
+
+    <div class="up-card">
+      <h3>📣 Recent Demo Alerts</h3>
+      <div id="alertList">
+        <div class="alert-item"><div class="alert-icon">📈</div><div><strong>Price movement detected</strong><p>Demo onion price increased by 4% in the selected market.</p></div></div>
+        <div class="alert-item"><div class="alert-icon">🚚</div><div><strong>Transport reminder</strong><p>Compare transport cost before selecting a distant mandi.</p></div></div>
+        <div class="alert-item"><div class="alert-icon">🌦️</div><div><strong>Weather reminder</strong><p>Check weather before dispatching perishable produce.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+</div>
+
+
+<div class="feature-strip" style="width:92%;max-width:1200px;margin:0 auto 25px;padding:14px 16px;border-radius:14px;background:#ffffff12;border:1px solid #ffffff18;color:#e3f5e9;font-size:13px;">
+    🌍 9 Languages &nbsp;•&nbsp; ⚖️ Weight in kg &nbsp;•&nbsp; 📱 Responsive Design &nbsp;•&nbsp; 🤖 AI-style Market Prediction
+</div>
+
+<footer>
+
+<strong>
+🌾 Farmer Setu
+</strong>
+
+<br>
+
+<span id="footerText">
+Smart agricultural market comparison system.
+</span>
+
+<br>
+
+<span id="footerDemo">
+Demo version — prices are sample data,
+not live Government market prices.
+</span>
+
+</footer>
+
+
+<script>
+
+/* =========================================================
+LANGUAGE DATA
+========================================================= */
+
+const LANG = {
+
+en: {
+
+heroTitle:"Find the Best Mandi for Your Crop",
+heroText:"Farmer Setu compares mandi prices, quantity and expected revenue to help farmers make better selling decisions.",
+findMarket:"🔎 FIND BEST MARKET",
+
+navDashboard:"🏠 Dashboard",
+navPrediction:"🤖 AI Predictions",
+navMap:"🗺️ Mandi Map",
+navBuyers:"👨‍🌾 Buyers",
+navAdmin:"⚙️ Admin Details",
+
+dashboardTitle:"🏠 Farmer Dashboard",
+dashboardText:"Quick overview of your crop market information.",
+
+selectedCrop:"Selected Crop",
+selectedDistrict:"Selected District",
+bestPrice:"Best Modal Price",
+estimatedRevenue:"Estimated Revenue",
+
+state:"State",
+district:"District",
+crop:"Crop",
+quantity:"Quantity (kg)",
+location:"Farmer Location",
+
+demoData:"Demo data:",
+demoText:"This college-project version uses sample mandi prices and does not connect to a live Government API.",
+
+predictionPage:"🤖 AI Price Predictions",
+predictionPageText:"Prediction changes according to selected state, district, crop and quantity.",
+
+selectMarket:"🌾 Select crop and market",
+selectMessage:"Select your state, district and crop, then search the market.",
+currentModal:"Current Modal",
+expectedPrice:"AI Expected Price",
+expectedRevenue:"Expected Revenue",
+market:"Market",
+confidence:"Confidence",
+
+recommended:"📊 Recommended Mandis",
+readyTitle:"🌱 Ready to find a market?",
+readyText:"Select your state, district, crop and quantity, then press Find Best Market.",
+
+mapPage:"🗺️ Mandi Map",
+mapPageText:"Demo map showing mandi locations for the currently selected district.",
+
+mapLocation:"📍 Selected Location:",
+mapDemo:"Showing demo mandi locations around",
+
+buyers:"👨‍🌾 Buyers",
+buyersText:"Potential buyers for different agricultural crops.",
+
+vegetables:"VEGETABLES",
+grains:"GRAINS",
+trader:"TRADER",
+directBuyer:"DIRECT BUYER",
+
+buyer1:"FreshMart Agro",
+buyer1Text:"Bulk buyer for onion, tomato and potato. Suitable for farmers with medium and large quantities.",
+buyer2:"Agro Processing Ltd.",
+buyer2Text:"Procures soybean, maize, wheat and gram for processing requirements.",
+buyer3:"Maharashtra Farm Traders",
+buyer3Text:"Agricultural commodity trader purchasing multiple crops from farmers.",
+buyer4:"Direct Market Buyer",
+buyer4Text:"Local buyer for farmers who want to sell produce directly.",
+
+admin:"⚙️ Admin Details",
+adminText:"System and project administration information.",
+systemStats:"📊 System Statistics",
+totalStates:"Total States",
+totalDistricts:"Total Districts",
+totalCrops:"Total Crops",
+totalMarkets:"Total Markets",
+
+systemStatus:"🔐 System Status",
+website:"Website",
+aiModule:"AI Module",
+marketDatabase:"Market Database",
+governmentApi:"Government API",
+online:"Online",
+active:"Active",
+demo:"Demo",
+notConnected:"Not Connected",
+
+projectDetails:"👨‍💻 Project Details",
+project:"Project",
+version:"Version",
+technology:"Technology",
+dataType:"Data Type",
+sampleData:"Sample Data",
+
+important:"Important:",
+importantText:"This is a college-project demonstration. Mandi prices, buyers and map locations are sample values and should not be treated as live Government market information.",
+
+voiceTitle:"🎙 Farmer Voice Assistant",
+voiceText:"Ask your agricultural market question using voice.",
+talkAI:"🎙 Talk to AI",
+
+footerText:"Smart agricultural market comparison system.",
+footerDemo:"Prices use Government of India OGD/AGMARKNET when an API key is configured; otherwise demo data is used.",
+
+bestOption:"⭐ BEST OPTION",
+cropWord:"Crop",
+quantityWord:"Quantity",
+minimum:"Minimum Price",
+modal:"Modal Price",
+maximum:"Maximum Price",
+revenue:"Estimated Revenue",
+transport:"Demo Transport",
+net:"Estimated Net",
+demoOnly:"⚠ Demo data only. Prices are not live Government mandi prices.",
+
+voiceListening:"🎙 Listening...",
+voiceCaptured:"✓ Voice captured",
+voiceUnavailable:"Voice input unavailable.",
+voiceNotSupported:"Voice recognition is not supported.",
+
+mandiAlert:"Demo mandi location.",
+
+confidenceWord:"Confidence"
+},
+
+mr: {
+
+heroTitle:"तुमच्या पिकासाठी सर्वोत्तम बाजारपेठ शोधा",
+heroText:"Farmer Setu मंडीचे दर, उत्पादनाचे प्रमाण आणि अपेक्षित उत्पन्नाची तुलना करून शेतकऱ्यांना चांगला विक्री निर्णय घेण्यास मदत करते.",
+findMarket:"🔎 सर्वोत्तम बाजारपेठ शोधा",
+
+navDashboard:"🏠 डॅशबोर्ड",
+navPrediction:"🤖 AI अंदाज",
+navMap:"🗺️ मंडी नकाशा",
+navBuyers:"👨‍🌾 खरेदीदार",
+navAdmin:"⚙️ प्रशासकीय माहिती",
+
+dashboardTitle:"🏠 शेतकरी डॅशबोर्ड",
+dashboardText:"तुमच्या पिकाच्या बाजारपेठेची थोडक्यात माहिती.",
+
+selectedCrop:"निवडलेले पीक",
+selectedDistrict:"निवडलेला जिल्हा",
+bestPrice:"सर्वोत्तम मोडल दर",
+estimatedRevenue:"अंदाजे उत्पन्न",
+
+state:"राज्य",
+district:"जिल्हा",
+crop:"पीक",
+quantity:"प्रमाण (किलो)",
+location:"शेतकऱ्याचे ठिकाण",
+
+demoData:"डेमो डेटा:",
+demoText:"या महाविद्यालयीन प्रकल्पात नमुना मंडी दर वापरले आहेत आणि तो थेट सरकारी API शी जोडलेला नाही.",
+
+predictionPage:"🤖 AI किंमत अंदाज",
+predictionPageText:"अंदाज निवडलेल्या राज्य, जिल्हा, पीक आणि प्रमाणानुसार बदलतो.",
+
+selectMarket:"🌾 पीक आणि बाजारपेठ निवडा",
+selectMessage:"राज्य, जिल्हा आणि पीक निवडा आणि नंतर बाजारपेठ शोधा.",
+currentModal:"सध्याचा मोडल दर",
+expectedPrice:"AI अपेक्षित दर",
+expectedRevenue:"अपेक्षित उत्पन्न",
+market:"बाजारपेठ",
+confidence:"विश्वास पातळी",
+
+recommended:"📊 शिफारस केलेल्या मंड्या",
+readyTitle:"🌱 बाजारपेठ शोधण्यासाठी तयार?",
+readyText:"राज्य, जिल्हा, पीक आणि प्रमाण निवडा आणि सर्वोत्तम बाजारपेठ शोधा.",
+
+mapPage:"🗺️ मंडी नकाशा",
+mapPageText:"सध्या निवडलेल्या जिल्ह्यातील मंडी ठिकाणांचा डेमो नकाशा.",
+
+mapLocation:"📍 निवडलेले ठिकाण:",
+mapDemo:"या जिल्ह्याच्या आसपास डेमो मंडी ठिकाणे दाखवत आहे",
+
+buyers:"👨‍🌾 खरेदीदार",
+buyersText:"वेगवेगळ्या कृषी पिकांसाठी संभाव्य खरेदीदार.",
+
+vegetables:"भाजीपाला",
+grains:"धान्य",
+trader:"व्यापारी",
+directBuyer:"थेट खरेदीदार",
+
+buyer1:"FreshMart Agro",
+buyer1Text:"कांदा, टोमॅटो आणि बटाट्याचा मोठ्या प्रमाणात खरेदीदार. मध्यम आणि मोठ्या प्रमाणातील शेतकऱ्यांसाठी योग्य.",
+buyer2:"Agro Processing Ltd.",
+buyer2Text:"प्रक्रिया उद्योगासाठी सोयाबीन, मका, गहू आणि हरभरा खरेदी करते.",
+buyer3:"Maharashtra Farm Traders",
+buyer3Text:"विविध कृषी पिके खरेदी करणारा कृषी व्यापारी.",
+buyer4:"Direct Market Buyer",
+buyer4Text:"थेट उत्पादन विक्री करू इच्छिणाऱ्या शेतकऱ्यांसाठी स्थानिक खरेदीदार.",
+
+admin:"⚙️ प्रशासकीय माहिती",
+adminText:"प्रणाली आणि प्रकल्प प्रशासनाची माहिती.",
+systemStats:"📊 प्रणालीची आकडेवारी",
+totalStates:"एकूण राज्ये",
+totalDistricts:"एकूण जिल्हे",
+totalCrops:"एकूण पिके",
+totalMarkets:"एकूण बाजारपेठा",
+
+systemStatus:"🔐 प्रणाली स्थिती",
+website:"वेबसाइट",
+aiModule:"AI मॉड्यूल",
+marketDatabase:"बाजारपेठ डेटाबेस",
+governmentApi:"सरकारी API",
+online:"ऑनलाइन",
+active:"सक्रिय",
+demo:"डेमो",
+notConnected:"जोडलेले नाही",
+
+projectDetails:"👨‍💻 प्रकल्पाची माहिती",
+project:"प्रकल्प",
+version:"आवृत्ती",
+technology:"तंत्रज्ञान",
+dataType:"डेटाचा प्रकार",
+sampleData:"नमुना डेटा",
+
+important:"महत्त्वाचे:",
+importantText:"हा महाविद्यालयीन प्रकल्पाचा डेमो आहे. मंडीचे दर, खरेदीदार आणि नकाशातील ठिकाणे नमुना आहेत. त्यांना सरकारी थेट बाजार माहिती समजू नये.",
+
+voiceTitle:"🎙 शेतकरी व्हॉइस असिस्टंट",
+voiceText:"आवाजाद्वारे तुमचा कृषी बाजाराचा प्रश्न विचारा.",
+talkAI:"🎙 AI शी बोला",
+
+footerText:"स्मार्ट कृषी बाजार तुलना प्रणाली.",
+footerDemo:"डेमो आवृत्ती — दर नमुना आहेत, सरकारी थेट मंडी दर नाहीत.",
+
+bestOption:"⭐ सर्वोत्तम पर्याय",
+cropWord:"पीक",
+quantityWord:"प्रमाण",
+minimum:"किमान दर",
+modal:"मोडल दर",
+maximum:"कमाल दर",
+revenue:"अंदाजे उत्पन्न",
+transport:"डेमो वाहतूक खर्च",
+net:"अंदाजे निव्वळ उत्पन्न",
+demoOnly:"⚠ डेमो डेटा. दर थेट सरकारी मंडीचे दर नाहीत.",
+
+voiceListening:"🎙 ऐकत आहे...",
+voiceCaptured:"✓ आवाज प्राप्त झाला",
+voiceUnavailable:"व्हॉइस इनपुट उपलब्ध नाही.",
+voiceNotSupported:"तुमच्या ब्राउझरमध्ये व्हॉइस सुविधा उपलब्ध नाही.",
+
+mandiAlert:"डेमो मंडी ठिकाण.",
+
+confidenceWord:"विश्वास"
+},
+
+hi: {
+
+heroTitle:"अपनी फसल के लिए सबसे अच्छी मंडी खोजें",
+heroText:"Farmer Setu मंडी की कीमत, मात्रा और अनुमानित आय की तुलना करके किसानों को बेहतर बिक्री निर्णय लेने में मदद करता है।",
+findMarket:"🔎 सबसे अच्छी मंडी खोजें",
+
+navDashboard:"🏠 डैशबोर्ड",
+navPrediction:"🤖 AI अनुमान",
+navMap:"🗺️ मंडी नक्शा",
+navBuyers:"👨‍🌾 खरीदार",
+navAdmin:"⚙️ एडमिन विवरण",
+
+dashboardTitle:"🏠 किसान डैशबोर्ड",
+dashboardText:"आपकी फसल और बाजार की जानकारी का संक्षिप्त विवरण।",
+
+selectedCrop:"चयनित फसल",
+selectedDistrict:"चयनित जिला",
+bestPrice:"सबसे अच्छा मॉडल भाव",
+estimatedRevenue:"अनुमानित आय",
+
+state:"राज्य",
+district:"जिला",
+crop:"फसल",
+quantity:"मात्रा (किलो)",
+location:"किसान का स्थान",
+
+demoData:"डेमो डेटा:",
+demoText:"इस कॉलेज प्रोजेक्ट में नमूना मंडी कीमतों का उपयोग किया गया है और यह लाइव सरकारी API से जुड़ा नहीं है।",
+
+predictionPage:"🤖 AI कीमत अनुमान",
+predictionPageText:"अनुमान चुने गए राज्य, जिले, फसल और मात्रा के अनुसार बदलता है।",
+
+selectMarket:"🌾 फसल और बाजार चुनें",
+selectMessage:"राज्य, जिला और फसल चुनें और फिर बाजार खोजें।",
+currentModal:"वर्तमान मॉडल भाव",
+expectedPrice:"AI अपेक्षित भाव",
+expectedRevenue:"अपेक्षित आय",
+market:"बाजार",
+confidence:"विश्वास",
+
+recommended:"📊 अनुशंसित मंडियां",
+readyTitle:"🌱 बाजार खोजने के लिए तैयार?",
+readyText:"राज्य, जिला, फसल और मात्रा चुनें और सबसे अच्छी मंडी खोजें।",
+
+mapPage:"🗺️ मंडी नक्शा",
+mapPageText:"वर्तमान चुने गए जिले के मंडी स्थानों का डेमो नक्शा।",
+
+mapLocation:"📍 चयनित स्थान:",
+mapDemo:"इस जिले के आसपास डेमो मंडी स्थान दिखाए जा रहे हैं",
+
+buyers:"👨‍🌾 खरीदार",
+buyersText:"विभिन्न कृषि फसलों के संभावित खरीदार।",
+
+vegetables:"सब्जियां",
+grains:"अनाज",
+trader:"व्यापारी",
+directBuyer:"सीधा खरीदार",
+
+buyer1:"FreshMart Agro",
+buyer1Text:"प्याज, टमाटर और आलू का थोक खरीदार। मध्यम और बड़ी मात्रा वाले किसानों के लिए उपयुक्त।",
+buyer2:"Agro Processing Ltd.",
+buyer2Text:"प्रसंस्करण के लिए सोयाबीन, मक्का, गेहूं और चना खरीदता है।",
+buyer3:"Maharashtra Farm Traders",
+buyer3Text:"विभिन्न कृषि फसलों की खरीद करने वाला कृषि व्यापारी।",
+buyer4:"Direct Market Buyer",
+buyer4Text:"जो किसान अपनी उपज सीधे बेचना चाहते हैं उनके लिए स्थानीय खरीदार।",
+
+admin:"⚙️ एडमिन विवरण",
+adminText:"सिस्टम और प्रोजेक्ट प्रशासन की जानकारी।",
+systemStats:"📊 सिस्टम आंकड़े",
+totalStates:"कुल राज्य",
+totalDistricts:"कुल जिले",
+totalCrops:"कुल फसलें",
+totalMarkets:"कुल बाजार",
+
+systemStatus:"🔐 सिस्टम स्थिति",
+website:"वेबसाइट",
+aiModule:"AI मॉड्यूल",
+marketDatabase:"बाजार डेटाबेस",
+governmentApi:"सरकारी API",
+online:"ऑनलाइन",
+active:"सक्रिय",
+demo:"डेमो",
+notConnected:"कनेक्ट नहीं है",
+
+projectDetails:"👨‍💻 प्रोजेक्ट विवरण",
+project:"प्रोजेक्ट",
+version:"संस्करण",
+technology:"तकनीक",
+dataType:"डेटा प्रकार",
+sampleData:"नमूना डेटा",
+
+important:"महत्वपूर्ण:",
+importantText:"यह कॉलेज प्रोजेक्ट का प्रदर्शन है। मंडी की कीमतें, खरीदार और नक्शे के स्थान नमूना हैं। इन्हें लाइव सरकारी बाजार जानकारी न समझें।",
+
+voiceTitle:"🎙 किसान वॉइस असिस्टेंट",
+voiceText:"आवाज का उपयोग करके कृषि बाजार का प्रश्न पूछें।",
+talkAI:"🎙 AI से बात करें",
+
+footerText:"स्मार्ट कृषि बाजार तुलना प्रणाली।",
+footerDemo:"डेमो संस्करण — कीमतें नमूना हैं, लाइव सरकारी मंडी कीमतें नहीं।",
+
+bestOption:"⭐ सबसे अच्छा विकल्प",
+cropWord:"फसल",
+quantityWord:"मात्रा",
+minimum:"न्यूनतम भाव",
+modal:"मॉडल भाव",
+maximum:"अधिकतम भाव",
+revenue:"अनुमानित आय",
+transport:"डेमो परिवहन",
+net:"अनुमानित शुद्ध आय",
+demoOnly:"⚠ डेमो डेटा। कीमतें लाइव सरकारी मंडी कीमतें नहीं हैं।",
+
+voiceListening:"🎙 सुन रहा है...",
+voiceCaptured:"✓ आवाज प्राप्त हुई",
+voiceUnavailable:"वॉइस इनपुट उपलब्ध नहीं है।",
+voiceNotSupported:"वॉइस रिकग्निशन समर्थित नहीं है।",
+
+mandiAlert:"डेमो मंडी स्थान।",
+
+confidenceWord:"विश्वास"
+},
+
+gu: {
+
+heroTitle:"તમારા પાક માટે શ્રેષ્ઠ મંડી શોધો",
+heroText:"Farmer Setu મંડીના ભાવ, જથ્થો અને અંદાજિત આવકની સરખામણી કરીને ખેડૂતોને વધુ સારો વેચાણ નિર્ણય લેવામાં મદદ કરે છે.",
+findMarket:"🔎 શ્રેષ્ઠ મંડી શોધો",
+
+navDashboard:"🏠 ડેશબોર્ડ",
+navPrediction:"🤖 AI આગાહી",
+navMap:"🗺️ મંડી નકશો",
+navBuyers:"👨‍🌾 ખરીદદારો",
+navAdmin:"⚙️ એડમિન વિગતો",
+
+dashboardTitle:"🏠 ખેડૂત ડેશબોર્ડ",
+dashboardText:"તમારા પાક અને બજારની માહિતીનું ઝડપી અવલોકન.",
+
+selectedCrop:"પસંદ કરેલ પાક",
+selectedDistrict:"પસંદ કરેલ જિલ્લો",
+bestPrice:"શ્રેષ્ઠ મોડલ ભાવ",
+estimatedRevenue:"અંદાજિત આવક",
+
+state:"રાજ્ય",
+district:"જિલ્લો",
+crop:"પાક",
+quantity:"જથ્થો (કિલો)",
+location:"ખેડૂતનું સ્થાન",
+
+demoData:"ડેમો ડેટા:",
+demoText:"આ કોલેજ પ્રોજેક્ટમાં નમૂના મંડી ભાવનો ઉપયોગ થાય છે અને તે લાઇવ સરકારી API સાથે જોડાયેલ નથી.",
+
+predictionPage:"🤖 AI ભાવ આગાહી",
+predictionPageText:"આગાહી પસંદ કરેલા રાજ્ય, જિલ્લા, પાક અને જથ્થા પ્રમાણે બદલાય છે.",
+
+selectMarket:"🌾 પાક અને બજાર પસંદ કરો",
+selectMessage:"રાજ્ય, જિલ્લો અને પાક પસંદ કરો અને પછી બજાર શોધો.",
+currentModal:"વર્તમાન મોડલ ભાવ",
+expectedPrice:"AI અપેક્ષિત ભાવ",
+expectedRevenue:"અપેક્ષિત આવક",
+market:"બજાર",
+confidence:"વિશ્વાસ",
+
+recommended:"📊 ભલામણ કરેલ મંડી",
+readyTitle:"🌱 બજાર શોધવા માટે તૈયાર?",
+readyText:"રાજ્ય, જિલ્લો, પાક અને જથ્થો પસંદ કરો અને શ્રેષ્ઠ બજાર શોધો.",
+
+mapPage:"🗺️ મંડી નકશો",
+mapPageText:"હાલ પસંદ કરેલા જિલ્લાના મંડી સ્થળોનો ડેમો નકશો.",
+
+mapLocation:"📍 પસંદ કરેલ સ્થાન:",
+mapDemo:"આ જિલ્લાના આસપાસ ડેમો મંડી સ્થળો બતાવવામાં આવી રહ્યા છે",
+
+buyers:"👨‍🌾 ખરીદદારો",
+buyersText:"વિવિધ કૃષિ પાકો માટે સંભવિત ખરીદદારો.",
+
+vegetables:"શાકભાજી",
+grains:"અનાજ",
+trader:"વેપારી",
+directBuyer:"સીધો ખરીદદાર",
+
+buyer1:"FreshMart Agro",
+buyer1Text:"ડુંગળી, ટામેટા અને બટાકાના જથ્થાબંધ ખરીદદાર. મધ્યમ અને મોટા જથ્થાવાળા ખેડૂતો માટે યોગ્ય.",
+buyer2:"Agro Processing Ltd.",
+buyer2Text:"પ્રોસેસિંગ માટે સોયાબીન, મકાઈ, ઘઉં અને ચણાની ખરીદી કરે છે.",
+buyer3:"Maharashtra Farm Traders",
+buyer3Text:"વિવિધ કૃષિ પાકોની ખરીદી કરતો કૃષિ વેપારી.",
+buyer4:"Direct Market Buyer",
+buyer4Text:"જે ખેડૂતો પોતાનું ઉત્પાદન સીધું વેચવા માંગે છે તેમના માટે સ્થાનિક ખરીદદાર.",
+
+admin:"⚙️ એડમિન વિગતો",
+adminText:"સિસ્ટમ અને પ્રોજેક્ટ વહીવટની માહિતી.",
+systemStats:"📊 સિસ્ટમ આંકડા",
+totalStates:"કુલ રાજ્યો",
+totalDistricts:"કુલ જિલ્લાઓ",
+totalCrops:"કુલ પાક",
+totalMarkets:"કુલ બજારો",
+
+systemStatus:"🔐 સિસ્ટમ સ્થિતિ",
+website:"વેબસાઇટ",
+aiModule:"AI મોડ્યુલ",
+marketDatabase:"બજાર ડેટાબેઝ",
+governmentApi:"સરકારી API",
+online:"ઓનલાઇન",
+active:"સક્રિય",
+demo:"ડેમો",
+notConnected:"જોડાયેલ નથી",
+
+projectDetails:"👨‍💻 પ્રોજેક્ટ વિગતો",
+project:"પ્રોજેક્ટ",
+version:"આવૃત્તિ",
+technology:"ટેકનોલોજી",
+dataType:"ડેટા પ્રકાર",
+sampleData:"નમૂના ડેટા",
+
+important:"મહત્વપૂર્ણ:",
+importantText:"આ કોલેજ પ્રોજેક્ટનું પ્રદર્શન છે. મંડીના ભાવ, ખરીદદારો અને નકશાના સ્થળો નમૂનાના છે. તેમને લાઇવ સરકારી બજારની માહિતી ન માનવી.",
+
+voiceTitle:"🎙 ખેડૂત વોઇસ આસિસ્ટન્ટ",
+voiceText:"અવાજનો ઉપયોગ કરીને કૃષિ બજારનો પ્રશ્ન પૂછો.",
+talkAI:"🎙 AI સાથે વાત કરો",
+
+footerText:"સ્માર્ટ કૃષિ બજાર સરખામણી સિસ્ટમ.",
+footerDemo:"ડેમો આવૃત્તિ — ભાવ નમૂનાના છે, લાઇવ સરકારી મંડી ભાવ નથી.",
+
+bestOption:"⭐ શ્રેષ્ઠ વિકલ્પ",
+cropWord:"પાક",
+quantityWord:"જથ્થો",
+minimum:"ન્યૂનતમ ભાવ",
+modal:"મોડલ ભાવ",
+maximum:"મહત્તમ ભાવ",
+revenue:"અંદાજિત આવક",
+transport:"ડેમો પરિવહન",
+net:"અંદાજિત ચોખ્ખી આવક",
+demoOnly:"⚠ ડેમો ડેટા. ભાવ લાઇવ સરકારી મંડીના ભાવ નથી.",
+
+voiceListening:"🎙 સાંભળી રહ્યું છે...",
+voiceCaptured:"✓ અવાજ પ્રાપ્ત થયો",
+voiceUnavailable:"વોઇસ ઇનપુટ ઉપલબ્ધ નથી.",
+voiceNotSupported:"વોઇસ રેકગ્નિશન સપોર્ટેડ નથી.",
+
+mandiAlert:"ડેમો મંડી સ્થાન.",
+
+confidenceWord:"વિશ્વાસ"
+}
+
+};
+
+
+/* =========================================================
+TRANSLATED STATES / DISTRICTS / CROPS
+========================================================= */
+
+
+/* Additional languages: core interface translations.
+   Dynamic crop/market names fall back to English when a regional
+   translation is not available. */
+LANG.bn = {
+    heroTitle:"আপনার ফসলের জন্য সেরা বাজার খুঁজুন",
+    heroText:"Farmer Setu বাজারদর, পরিমাণ এবং সম্ভাব্য আয়ের তুলনা করে কৃষকদের ভালো বিক্রয় সিদ্ধান্ত নিতে সাহায্য করে।",
+    findMarket:"🔎 সেরা বাজার খুঁজুন",
+    navDashboard:"🏠 ড্যাশবোর্ড", navPrediction:"🤖 AI পূর্বাভাস", navMap:"🗺️ বাজার মানচিত্র",
+    navBuyers:"👨‍🌾 ক্রেতা", navAdmin:"⚙️ অ্যাডমিন তথ্য",
+    dashboardTitle:"🏠 কৃষক ড্যাশবোর্ড", dashboardText:"আপনার ফসল ও বাজারের দ্রুত তথ্য।",
+    selectedCrop:"নির্বাচিত ফসল", selectedDistrict:"নির্বাচিত জেলা", bestPrice:"সেরা মডেল দাম", estimatedRevenue:"আনুমানিক আয়",
+    state:"রাজ্য", district:"জেলা", crop:"ফসল", quantity:"ফসলের ওজন (কেজি)", location:"কৃষকের অবস্থান",
+    demoData:"ডেমো ডেটা:", demoText:"এই কলেজ প্রকল্পে নমুনা বাজারদর ব্যবহার করা হয়েছে; এটি লাইভ সরকারি API-এর সাথে সংযুক্ত নয়।",
+    predictionPage:"🤖 AI মূল্য পূর্বাভাস", predictionPageText:"পূর্বাভাস নির্বাচিত রাজ্য, জেলা, ফসল ও পরিমাণ অনুযায়ী পরিবর্তিত হয়।",
+    selectMarket:"🌾 ফসল ও বাজার নির্বাচন করুন", selectMessage:"রাজ্য, জেলা ও ফসল নির্বাচন করে বাজার খুঁজুন।",
+    currentModal:"বর্তমান মডেল দাম", expectedPrice:"AI প্রত্যাশিত দাম", expectedRevenue:"প্রত্যাশিত আয়", market:"বাজার", confidence:"আস্থা",
+    recommended:"📊 প্রস্তাবিত বাজার", readyTitle:"🌱 বাজার খুঁজতে প্রস্তুত?", readyText:"রাজ্য, জেলা, ফসল ও পরিমাণ নির্বাচন করে সেরা বাজার খুঁজুন।",
+    mapPage:"🗺️ বাজার মানচিত্র", mapPageText:"নির্বাচিত জেলার ডেমো বাজার মানচিত্র।", mapLocation:"📍 নির্বাচিত স্থান:", mapDemo:"এই জেলার আশেপাশের ডেমো বাজার",
+    buyers:"👨‍🌾 ক্রেতা", buyersText:"বিভিন্ন কৃষি ফসলের সম্ভাব্য ক্রেতা।",
+    vegetables:"সবজি", grains:"শস্য", trader:"ব্যবসায়ী", directBuyer:"সরাসরি ক্রেতা",
+    admin:"⚙️ অ্যাডমিন তথ্য", adminText:"সিস্টেম ও প্রকল্প প্রশাসনের তথ্য।",
+    systemStats:"📊 সিস্টেম পরিসংখ্যান", totalStates:"মোট রাজ্য", totalDistricts:"মোট জেলা", totalCrops:"মোট ফসল", totalMarkets:"মোট বাজার",
+    systemStatus:"🔐 সিস্টেম অবস্থা", website:"ওয়েবসাইট", aiModule:"AI মডিউল", marketDatabase:"বাজার ডেটাবেস", governmentApi:"সরকারি API",
+    online:"অনলাইন", active:"সক্রিয়", demo:"ডেমো", notConnected:"সংযুক্ত নয়",
+    projectDetails:"👨‍💻 প্রকল্পের তথ্য", project:"প্রকল্প", version:"সংস্করণ", technology:"প্রযুক্তি", dataType:"ডেটার ধরন", sampleData:"নমুনা ডেটা",
+    important:"গুরুত্বপূর্ণ:", importantText:"এটি একটি কলেজ প্রকল্পের ডেমো। বাজারদর, ক্রেতা ও মানচিত্রের স্থানগুলো নমুনা তথ্য।",
+    voiceTitle:"🎙 কৃষক ভয়েস অ্যাসিস্ট্যান্ট", voiceText:"ভয়েস ব্যবহার করে কৃষি বাজারের প্রশ্ন করুন।", talkAI:"🎙 AI-এর সাথে কথা বলুন",
+    footerText:"স্মার্ট কৃষি বাজার তুলনা ব্যবস্থা।", footerDemo:"ডেমো সংস্করণ — দাম নমুনা, লাইভ সরকারি বাজারদর নয়।",
+    bestOption:"⭐ সেরা বিকল্প", cropWord:"ফসল", quantityWord:"পরিমাণ", minimum:"সর্বনিম্ন দাম", modal:"মডেল দাম", maximum:"সর্বোচ্চ দাম",
+    revenue:"আনুমানিক আয়", transport:"ডেমো পরিবহন", net:"আনুমানিক নিট আয়", demoOnly:"⚠ ডেমো ডেটা। দাম লাইভ সরকারি বাজারদর নয়।",
+    voiceListening:"🎙 শুনছি...", voiceCaptured:"✓ ভয়েস পাওয়া গেছে", voiceUnavailable:"ভয়েস ইনপুট উপলভ্য নয়।", voiceNotSupported:"ভয়েস রিকগনিশন সমর্থিত নয়।",
+    mandiAlert:"ডেমো বাজারের স্থান।", confidenceWord:"আস্থা"
+};
+LANG.ta = {
+    heroTitle:"உங்கள் பயிருக்கு சிறந்த சந்தையை கண்டறியுங்கள்", heroText:"Farmer Setu சந்தை விலை, அளவு மற்றும் எதிர்பார்க்கப்படும் வருமானத்தை ஒப்பிட்டு சிறந்த விற்பனை முடிவெடுக்க உதவுகிறது。",
+    findMarket:"🔎 சிறந்த சந்தையை தேடுங்கள்", navDashboard:"🏠 டாஷ்போர்டு", navPrediction:"🤖 AI கணிப்பு", navMap:"🗺️ சந்தை வரைபடம்", navBuyers:"👨‍🌾 வாங்குபவர்கள்", navAdmin:"⚙️ நிர்வாகம்",
+    dashboardTitle:"🏠 விவசாயி டாஷ்போர்டு", dashboardText:"உங்கள் பயிர் மற்றும் சந்தை தகவலின் விரைவான பார்வை.", selectedCrop:"தேர்ந்தெடுத்த பயிர்", selectedDistrict:"தேர்ந்தெடுத்த மாவட்டம்", bestPrice:"சிறந்த மாடல் விலை", estimatedRevenue:"மதிப்பிடப்பட்ட வருமானம்",
+    state:"மாநிலம்", district:"மாவட்டம்", crop:"பயிர்", quantity:"பயிர் எடை (கிலோ)", location:"விவசாயியின் இடம்", demoData:"டெமோ தரவு:", demoText:"இந்த கல்லூரி திட்டம் மாதிரி சந்தை விலைகளைப் பயன்படுத்துகிறது; நேரடி அரசு API இல்லை.",
+    predictionPage:"🤖 AI விலை கணிப்பு", predictionPageText:"கணிப்பு தேர்ந்தெடுத்த மாநிலம், மாவட்டம், பயிர் மற்றும் அளவின் அடிப்படையில் மாறும்.", selectMarket:"🌾 பயிர் மற்றும் சந்தையைத் தேர்ந்தெடுக்கவும்", selectMessage:"மாநிலம், மாவட்டம் மற்றும் பயிரைத் தேர்ந்தெடுத்து சந்தையைத் தேடுங்கள்.",
+    currentModal:"தற்போதைய மாடல் விலை", expectedPrice:"AI எதிர்பார்க்கும் விலை", expectedRevenue:"எதிர்பார்க்கப்படும் வருமானம்", market:"சந்தை", confidence:"நம்பிக்கை", recommended:"📊 பரிந்துரைக்கப்பட்ட சந்தைகள்", readyTitle:"🌱 சந்தையைத் தேட தயாரா?", readyText:"மாநிலம், மாவட்டம், பயிர் மற்றும் அளவைத் தேர்ந்தெடுக்கவும்.",
+    mapPage:"🗺️ சந்தை வரைபடம்", mapPageText:"தேர்ந்தெடுக்கப்பட்ட மாவட்டத்தின் டெமோ சந்தை வரைபடம்.", mapLocation:"📍 தேர்ந்தெடுத்த இடம்:", mapDemo:"இந்த மாவட்டத்தைச் சுற்றியுள்ள டெமோ சந்தைகள்",
+    buyers:"👨‍🌾 வாங்குபவர்கள்", buyersText:"பல்வேறு விவசாய பயிர்களுக்கான சாத்தியமான வாங்குபவர்கள்.", vegetables:"காய்கறிகள்", grains:"தானியங்கள்", trader:"வியாபாரி", directBuyer:"நேரடி வாங்குபவர்",
+    admin:"⚙️ நிர்வாக தகவல்", adminText:"அமைப்பு மற்றும் திட்ட நிர்வாகத் தகவல்.", systemStats:"📊 அமைப்பு புள்ளிவிவரங்கள்", totalStates:"மாநிலங்கள்", totalDistricts:"மாவட்டங்கள்", totalCrops:"பயிர்கள்", totalMarkets:"சந்தைகள்",
+    systemStatus:"🔐 அமைப்பு நிலை", website:"வலைத்தளம்", aiModule:"AI தொகுதி", marketDatabase:"சந்தை தரவுத்தளம்", governmentApi:"அரசு API", online:"ஆன்லைன்", active:"செயலில்", demo:"டெமோ", notConnected:"இணைக்கப்படவில்லை",
+    projectDetails:"👨‍💻 திட்ட விவரங்கள்", project:"திட்டம்", version:"பதிப்பு", technology:"தொழில்நுட்பம்", dataType:"தரவு வகை", sampleData:"மாதிரி தரவு",
+    important:"முக்கியம்:", importantText:"இது கல்லூரி திட்டத்தின் டெமோ. சந்தை விலைகள், வாங்குபவர்கள் மற்றும் வரைபட இடங்கள் மாதிரி தரவுகள்.",
+    voiceTitle:"🎙 விவசாயி குரல் உதவியாளர்", voiceText:"குரலைப் பயன்படுத்தி விவசாய சந்தை கேள்வியைக் கேளுங்கள்.", talkAI:"🎙 AI-யுடன் பேசுங்கள்",
+    footerText:"ஸ்மார்ட் விவசாய சந்தை ஒப்பீட்டு அமைப்பு.", footerDemo:"டெமோ பதிப்பு — விலைகள் மாதிரி தரவு.", bestOption:"⭐ சிறந்த தேர்வு", cropWord:"பயிர்", quantityWord:"அளவு", minimum:"குறைந்தபட்ச விலை", modal:"மாடல் விலை", maximum:"அதிகபட்ச விலை", revenue:"மதிப்பிடப்பட்ட வருமானம்", transport:"டெமோ போக்குவரத்து", net:"மதிப்பிடப்பட்ட நிகர வருமானம்", demoOnly:"⚠ டெமோ தரவு.", voiceListening:"🎙 கேட்கிறது...", voiceCaptured:"✓ குரல் பெறப்பட்டது", voiceUnavailable:"குரல் உள்ளீடு இல்லை.", voiceNotSupported:"குரல் அங்கீகாரம் ஆதரிக்கப்படவில்லை.", mandiAlert:"டெமோ சந்தை இடம்.", confidenceWord:"நம்பிக்கை"
+};
+LANG.te = {
+    heroTitle:"మీ పంటకు ఉత్తమ మార్కెట్‌ను కనుగొనండి", heroText:"Farmer Setu మార్కెట్ ధర, పరిమాణం మరియు అంచనా ఆదాయాన్ని పోల్చి రైతులకు మెరుగైన విక్రయ నిర్ణయాలు తీసుకోవడంలో సహాయపడుతుంది.",
+    findMarket:"🔎 ఉత్తమ మార్కెట్‌ను కనుగొనండి", navDashboard:"🏠 డ్యాష్‌బోర్డ్", navPrediction:"🤖 AI అంచనా", navMap:"🗺️ మార్కెట్ మ్యాప్", navBuyers:"👨‍🌾 కొనుగోలుదారులు", navAdmin:"⚙️ అడ్మిన్ వివరాలు",
+    dashboardTitle:"🏠 రైతు డ్యాష్‌బోర్డ్", dashboardText:"మీ పంట మరియు మార్కెట్ సమాచారం యొక్క త్వరిత అవలోకనం.", selectedCrop:"ఎంచుకున్న పంట", selectedDistrict:"ఎంచుకున్న జిల్లా", bestPrice:"ఉత్తమ మోడల్ ధర", estimatedRevenue:"అంచనా ఆదాయం",
+    state:"రాష్ట్రం", district:"జిల్లా", crop:"పంట", quantity:"పంట బరువు (కిలోలు)", location:"రైతు స్థానం", demoData:"డెమో డేటా:", demoText:"ఈ కళాశాల ప్రాజెక్ట్ నమూనా మార్కెట్ ధరలను ఉపయోగిస్తుంది; లైవ్ ప్రభుత్వ APIకి కనెక్ట్ కాలేదు.",
+    predictionPage:"🤖 AI ధర అంచనా", predictionPageText:"ఎంచుకున్న రాష్ట్రం, జిల్లా, పంట మరియు పరిమాణాన్ని బట్టి అంచనా మారుతుంది.", selectMarket:"🌾 పంట మరియు మార్కెట్‌ను ఎంచుకోండి", selectMessage:"రాష్ట్రం, జిల్లా మరియు పంటను ఎంచుకుని మార్కెట్‌ను వెతకండి.",
+    currentModal:"ప్రస్తుత మోడల్ ధర", expectedPrice:"AI అంచనా ధర", expectedRevenue:"అంచనా ఆదాయం", market:"మార్కెట్", confidence:"నమ్మకం", recommended:"📊 సిఫార్సు చేసిన మార్కెట్లు", readyTitle:"🌱 మార్కెట్ వెతకడానికి సిద్ధమా?", readyText:"రాష్ట్రం, జిల్లా, పంట మరియు పరిమాణాన్ని ఎంచుకోండి.",
+    mapPage:"🗺️ మార్కెట్ మ్యాప్", mapPageText:"ఎంచుకున్న జిల్లా యొక్క డెమో మార్కెట్ మ్యాప్.", mapLocation:"📍 ఎంచుకున్న స్థానం:", mapDemo:"ఈ జిల్లా చుట్టూ డెమో మార్కెట్లు",
+    buyers:"👨‍🌾 కొనుగోలుదారులు", buyersText:"వివిధ వ్యవసాయ పంటలకు సంభావ్య కొనుగోలుదారులు.", vegetables:"కూరగాయలు", grains:"ధాన్యాలు", trader:"వ్యాపారి", directBuyer:"ప్రత్యక్ష కొనుగోలుదారు",
+    admin:"⚙️ అడ్మిన్ వివరాలు", adminText:"సిస్టమ్ మరియు ప్రాజెక్ట్ పరిపాలన సమాచారం.", systemStats:"📊 సిస్టమ్ గణాంకాలు", totalStates:"మొత్తం రాష్ట్రాలు", totalDistricts:"మొత్తం జిల్లాలు", totalCrops:"మొత్తం పంటలు", totalMarkets:"మొత్తం మార్కెట్లు",
+    systemStatus:"🔐 సిస్టమ్ స్థితి", website:"వెబ్‌సైట్", aiModule:"AI మాడ్యూల్", marketDatabase:"మార్కెట్ డేటాబేస్", governmentApi:"ప్రభుత్వ API", online:"ఆన్‌లైన్", active:"యాక్టివ్", demo:"డెమో", notConnected:"కనెక్ట్ కాలేదు",
+    projectDetails:"👨‍💻 ప్రాజెక్ట్ వివరాలు", project:"ప్రాజెక్ట్", version:"వెర్షన్", technology:"టెక్నాలజీ", dataType:"డేటా రకం", sampleData:"నమూనా డేటా",
+    important:"ముఖ్యమైనది:", importantText:"ఇది కళాశాల ప్రాజెక్ట్ డెమో. మార్కెట్ ధరలు, కొనుగోలుదారులు మరియు మ్యాప్ స్థానాలు నమూనా డేటా.",
+    voiceTitle:"🎙 రైతు వాయిస్ అసిస్టెంట్", voiceText:"వాయిస్ ద్వారా వ్యవసాయ మార్కెట్ ప్రశ్న అడగండి.", talkAI:"🎙 AIతో మాట్లాడండి", footerText:"స్మార్ట్ వ్యవసాయ మార్కెట్ పోలిక వ్యవస్థ.", footerDemo:"డెమో వెర్షన్ — ధరలు నమూనా డేటా.",
+    bestOption:"⭐ ఉత్తమ ఎంపిక", cropWord:"పంట", quantityWord:"పరిమాణం", minimum:"కనిష్ట ధర", modal:"మోడల్ ధర", maximum:"గరిష్ట ధర", revenue:"అంచనా ఆదాయం", transport:"డెమో రవాణా", net:"అంచనా నికర ఆదాయం", demoOnly:"⚠ డెమో డేటా.", voiceListening:"🎙 వింటోంది...", voiceCaptured:"✓ వాయిస్ పొందబడింది", voiceUnavailable:"వాయిస్ ఇన్‌పుట్ అందుబాటులో లేదు.", voiceNotSupported:"వాయిస్ గుర్తింపు మద్దతు లేదు.", mandiAlert:"డెమో మార్కెట్ స్థానం.", confidenceWord:"నమ్మకం"
+};
+LANG.kn = {...LANG.en, heroTitle:"ನಿಮ್ಮ ಬೆಳೆಗೆ ಉತ್ತಮ ಮಾರುಕಟ್ಟೆಯನ್ನು ಹುಡುಕಿ", heroText:"Farmer Setu ಮಾರುಕಟ್ಟೆ ಬೆಲೆ, ಪ್ರಮಾಣ ಮತ್ತು ನಿರೀಕ್ಷಿತ ಆದಾಯವನ್ನು ಹೋಲಿಸಿ ರೈತರಿಗೆ ಉತ್ತಮ ಮಾರಾಟ ನಿರ್ಧಾರಕ್ಕೆ ಸಹಾಯ ಮಾಡುತ್ತದೆ.", findMarket:"🔎 ಉತ್ತಮ ಮಾರುಕಟ್ಟೆ ಹುಡುಕಿ", navDashboard:"🏠 ಡ್ಯಾಶ್‌ಬೋರ್ಡ್", navPrediction:"🤖 AI ಅಂದಾಜು", navMap:"🗺️ ಮಾರುಕಟ್ಟೆ ನಕ್ಷೆ", navBuyers:"👨‍🌾 ಖರೀದಿದಾರರು", navAdmin:"⚙️ ನಿರ್ವಾಹಕ ವಿವರಗಳು", quantity:"ಬೆಳೆಯ ತೂಕ (ಕೆಜಿ)", state:"ರಾಜ್ಯ", district:"ಜಿಲ್ಲೆ", crop:"ಬೆಳೆ"};
+LANG.pa = {...LANG.en, heroTitle:"ਆਪਣੀ ਫਸਲ ਲਈ ਸਭ ਤੋਂ ਵਧੀਆ ਮੰਡੀ ਲੱਭੋ", heroText:"Farmer Setu ਮੰਡੀ ਦੀ ਕੀਮਤ, ਮਾਤਰਾ ਅਤੇ ਅਨੁਮਾਨਿਤ ਆਮਦਨ ਦੀ ਤੁਲਨਾ ਕਰਕੇ ਕਿਸਾਨਾਂ ਨੂੰ ਵਧੀਆ ਵਿਕਰੀ ਫੈਸਲਾ ਲੈਣ ਵਿੱਚ ਮਦਦ ਕਰਦਾ ਹੈ।", findMarket:"🔎 ਸਭ ਤੋਂ ਵਧੀਆ ਮੰਡੀ ਲੱਭੋ", navDashboard:"🏠 ਡੈਸ਼ਬੋਰਡ", navPrediction:"🤖 AI ਅਨੁਮਾਨ", navMap:"🗺️ ਮੰਡੀ ਨਕਸ਼ਾ", navBuyers:"👨‍🌾 ਖਰੀਦਦਾਰ", navAdmin:"⚙️ ਐਡਮਿਨ ਵੇਰਵੇ", quantity:"ਫਸਲ ਦਾ ਭਾਰ (ਕਿਲੋਗ੍ਰਾਮ)", state:"ਰਾਜ", district:"ਜ਼ਿਲ੍ਹਾ", crop:"ਫਸਲ"};
+
+
+const NAMES = {
+
+en:{
+Maharashtra:"Maharashtra",
+Pune:"Pune",
+Nashik:"Nashik",
+Ahmednagar:"Ahmednagar",
+Satara:"Satara",
+Solapur:"Solapur",
+Kolhapur:"Kolhapur",
+
+Gujarat:"Gujarat",
+Ahmedabad:"Ahmedabad",
+Rajkot:"Rajkot",
+Surat:"Surat",
+Vadodara:"Vadodara",
+
+Karnataka:"Karnataka",
+Bengaluru:"Bengaluru",
+Mysuru:"Mysuru",
+Belagavi:"Belagavi",
+Hubballi:"Hubballi",
+
+Onion:"Onion",
+Tomato:"Tomato",
+Potato:"Potato",
+Wheat:"Wheat",
+Maize:"Maize",
+Soybean:"Soybean",
+Tur:"Tur",
+Gram:"Gram",
+Groundnut:"Groundnut",
+Sugarcane:"Sugarcane",
+
+"Pune Mandi":"Pune Mandi",
+"Pimpri Mandi":"Pimpri Mandi",
+"Manjri Mandi":"Manjri Mandi",
+"Khed Mandi":"Khed Mandi",
+"Nashik Mandi":"Nashik Mandi",
+"Lasalgaon Mandi":"Lasalgaon Mandi",
+"Yeola Mandi":"Yeola Mandi",
+"Ahmednagar Mandi":"Ahmednagar Mandi",
+"Rahuri Mandi":"Rahuri Mandi",
+"Satara Mandi":"Satara Mandi",
+"Karad Mandi":"Karad Mandi",
+"Solapur Mandi":"Solapur Mandi",
+"Akluj Mandi":"Akluj Mandi",
+"Kolhapur Mandi":"Kolhapur Mandi",
+"Shirol Mandi":"Shirol Mandi",
+"Ahmedabad APMC":"Ahmedabad APMC",
+"Naroda Market":"Naroda Market",
+"Rajkot APMC":"Rajkot APMC",
+"Gondal APMC":"Gondal APMC",
+"Surat APMC":"Surat APMC",
+"Bardoli APMC":"Bardoli APMC",
+"Vadodara APMC":"Vadodara APMC",
+"Savli APMC":"Savli APMC",
+"Bengaluru APMC":"Bengaluru APMC",
+"Yeshwanthpur Market":"Yeshwanthpur Market",
+"Mysuru APMC":"Mysuru APMC",
+"Nanjangud Market":"Nanjangud Market",
+"Belagavi APMC":"Belagavi APMC",
+"Gokak Market":"Gokak Market",
+"Hubballi APMC":"Hubballi APMC",
+"Dharwad APMC":"Dharwad APMC"
+},
+
+mr:{
+Maharashtra:"महाराष्ट्र",
+Pune:"पुणे",
+Nashik:"नाशिक",
+Ahmednagar:"अहिल्यानगर",
+Satara:"सातारा",
+Solapur:"सोलापूर",
+Kolhapur:"कोल्हापूर",
+
+Gujarat:"गुजरात",
+Ahmedabad:"अहमदाबाद",
+Rajkot:"राजकोट",
+Surat:"सुरत",
+Vadodara:"वडोदरा",
+
+Karnataka:"कर्नाटक",
+Bengaluru:"बेंगळुरू",
+Mysuru:"म्हैसूर",
+Belagavi:"बेळगावी",
+Hubballi:"हुबळी",
+
+Onion:"कांदा",
+Tomato:"टोमॅटो",
+Potato:"बटाटा",
+Wheat:"गहू",
+Maize:"मका",
+Soybean:"सोयाबीन",
+Tur:"तूर",
+Gram:"हरभरा",
+Groundnut:"भुईमूग",
+Sugarcane:"ऊस",
+
+"Pune Mandi":"पुणे मंडी",
+"Pimpri Mandi":"पिंपरी मंडी",
+"Manjri Mandi":"मांजरी मंडी",
+"Khed Mandi":"खेड मंडी",
+"Nashik Mandi":"नाशिक मंडी",
+"Lasalgaon Mandi":"लासलगाव मंडी",
+"Yeola Mandi":"येवला मंडी",
+"Ahmednagar Mandi":"अहिल्यानगर मंडी",
+"Rahuri Mandi":"राहुरी मंडी",
+"Satara Mandi":"सातारा मंडी",
+"Karad Mandi":"कराड मंडी",
+"Solapur Mandi":"सोलापूर मंडी",
+"Akluj Mandi":"अकलूज मंडी",
+"Kolhapur Mandi":"कोल्हापूर मंडी",
+"Shirol Mandi":"शिरोळ मंडी",
+"Ahmedabad APMC":"अहमदाबाद APMC",
+"Naroda Market":"नरोडा मार्केट",
+"Rajkot APMC":"राजकोट APMC",
+"Gondal APMC":"गोंडल APMC",
+"Surat APMC":"सुरत APMC",
+"Bardoli APMC":"बारडोली APMC",
+"Vadodara APMC":"वडोदरा APMC",
+"Savli APMC":"सावली APMC",
+"Bengaluru APMC":"बेंगळुरू APMC",
+"Yeshwanthpur Market":"येशवंतपूर मार्केट",
+"Mysuru APMC":"म्हैसूर APMC",
+"Nanjangud Market":"नंजनगुड मार्केट",
+"Belagavi APMC":"बेळगावी APMC",
+"Gokak Market":"गोकाक मार्केट",
+"Hubballi APMC":"हुबळी APMC",
+"Dharwad APMC":"धारवाड APMC"
+},
+
+hi:{
+Maharashtra:"महाराष्ट्र",
+Pune:"पुणे",
+Nashik:"नासिक",
+Ahmednagar:"अहिल्यानगर",
+Satara:"सातारा",
+Solapur:"सोलापुर",
+Kolhapur:"कोल्हापुर",
+
+Gujarat:"गुजरात",
+Ahmedabad:"अहमदाबाद",
+Rajkot:"राजकोट",
+Surat:"सूरत",
+Vadodara:"वडोदरा",
+
+Karnataka:"कर्नाटक",
+Bengaluru:"बेंगलुरु",
+Mysuru:"मैसूर",
+Belagavi:"बेलगावी",
+Hubballi:"हुबली",
+
+Onion:"प्याज",
+Tomato:"टमाटर",
+Potato:"आलू",
+Wheat:"गेहूं",
+Maize:"मक्का",
+Soybean:"सोयाबीन",
+Tur:"तूर",
+Gram:"चना",
+Groundnut:"मूंगफली",
+Sugarcane:"गन्ना",
+
+"Pune Mandi":"पुणे मंडी",
+"Pimpri Mandi":"पिंपरी मंडी",
+"Manjri Mandi":"मांजरी मंडी",
+"Khed Mandi":"खेड़ मंडी",
+"Nashik Mandi":"नासिक मंडी",
+"Lasalgaon Mandi":"लासलगांव मंडी",
+"Yeola Mandi":"येवला मंडी",
+"Ahmednagar Mandi":"अहिल्यानगर मंडी",
+"Rahuri Mandi":"राहुरी मंडी",
+"Satara Mandi":"सातारा मंडी",
+"Karad Mandi":"कराड मंडी",
+"Solapur Mandi":"सोलापुर मंडी",
+"Akluj Mandi":"अकलुज मंडी",
+"Kolhapur Mandi":"कोल्हापुर मंडी",
+"Shirol Mandi":"शिरोल मंडी",
+"Ahmedabad APMC":"अहमदाबाद APMC",
+"Naroda Market":"नरोदा मार्केट",
+"Rajkot APMC":"राजकोट APMC",
+"Gondal APMC":"गोंडल APMC",
+"Surat APMC":"सूरत APMC",
+"Bardoli APMC":"बारडोली APMC",
+"Vadodara APMC":"वडोदरा APMC",
+"Savli APMC":"सावली APMC",
+"Bengaluru APMC":"बेंगलुरु APMC",
+"Yeshwanthpur Market":"येशवंतपुर मार्केट",
+"Mysuru APMC":"मैसूर APMC",
+"Nanjangud Market":"नंजनगुड मार्केट",
+"Belagavi APMC":"बेलगावी APMC",
+"Gokak Market":"गोकक मार्केट",
+"Hubballi APMC":"हुबली APMC",
+"Dharwad APMC":"धारवाड़ APMC"
+},
+
+gu:{
+Maharashtra:"મહારાષ્ટ્ર",
+Pune:"પુણે",
+Nashik:"નાશિક",
+Ahmednagar:"અહિલ્યાનગર",
+Satara:"સાતારા",
+Solapur:"સોલાપુર",
+Kolhapur:"કોલ્હાપુર",
+
+Gujarat:"ગુજરાત",
+Ahmedabad:"અમદાવાદ",
+Rajkot:"રાજકોટ",
+Surat:"સુરત",
+Vadodara:"વડોદરા",
+
+Karnataka:"કર્ણાટક",
+Bengaluru:"બેંગલુરુ",
+Mysuru:"મૈસુરુ",
+Belagavi:"બેલગાવી",
+Hubballi:"હુબલ્લી",
+
+Onion:"ડુંગળી",
+Tomato:"ટામેટા",
+Potato:"બટાકા",
+Wheat:"ઘઉં",
+Maize:"મકાઈ",
+Soybean:"સોયાબીન",
+Tur:"તુવેર",
+Gram:"ચણા",
+Groundnut:"મગફળી",
+Sugarcane:"શેરડી",
+
+"Pune Mandi":"પુણે મંડી",
+"Pimpri Mandi":"પિમ્પરી મંડી",
+"Manjri Mandi":"માંજરી મંડી",
+"Khed Mandi":"ખેડ મંડી",
+"Nashik Mandi":"નાશિક મંડી",
+"Lasalgaon Mandi":"લાસલગાંવ મંડી",
+"Yeola Mandi":"યેવલા મંડી",
+"Ahmednagar Mandi":"અહિલ્યાનગર મંડી",
+"Rahuri Mandi":"રાહુરી મંડી",
+"Satara Mandi":"સાતારા મંડી",
+"Karad Mandi":"કરાડ મંડી",
+"Solapur Mandi":"સોલાપુર મંડી",
+"Akluj Mandi":"અકલુજ મંડી",
+"Kolhapur Mandi":"કોલ્હાપુર મંડી",
+"Shirol Mandi":"શિરોલ મંડી",
+"Ahmedabad APMC":"અમદાવાદ APMC",
+"Naroda Market":"નરોડા માર્કેટ",
+"Rajkot APMC":"રાજકોટ APMC",
+"Gondal APMC":"ગોંડલ APMC",
+"Surat APMC":"સુરત APMC",
+"Bardoli APMC":"બારડોલી APMC",
+"Vadodara APMC":"વડોદરા APMC",
+"Savli APMC":"સાવલી APMC",
+"Bengaluru APMC":"બેંગલુરુ APMC",
+"Yeshwanthpur Market":"યેશવંતપુર માર્કેટ",
+"Mysuru APMC":"મૈસુરુ APMC",
+"Nanjangud Market":"નંજનગુડ માર્કેટ",
+"Belagavi APMC":"બેલગાવી APMC",
+"Gokak Market":"ગોકાક માર્કેટ",
+"Hubballi APMC":"હુબલ્લી APMC",
+"Dharwad APMC":"ધારવાડ APMC"
+}
+
+};
+
+
+/* =========================================================
+DATABASE
+========================================================= */
+
+const DATA = {
+
+Maharashtra:{
+
+Pune:{
+markets:[
+["Pune Mandi",2500],
+["Pimpri Mandi",2650],
+["Manjri Mandi",2450],
+["Khed Mandi",2350]
+]
+},
+
+Nashik:{
+markets:[
+["Nashik Mandi",2750],
+["Lasalgaon Mandi",2900],
+["Yeola Mandi",2800]
+]
+},
+
+Ahmednagar:{
+markets:[
+["Ahmednagar Mandi",2550],
+["Rahuri Mandi",2600]
+]
+},
+
+Satara:{
+markets:[
+["Satara Mandi",2500],
+["Karad Mandi",2580]
+]
+},
+
+Solapur:{
+markets:[
+["Solapur Mandi",2700],
+["Akluj Mandi",2650]
+]
+},
+
+Kolhapur:{
+markets:[
+["Kolhapur Mandi",2600],
+["Shirol Mandi",2550]
+]
+}
+
+},
+
+Gujarat:{
+
+Ahmedabad:{
+markets:[
+["Ahmedabad APMC",2800],
+["Naroda Market",2750]
+]
+},
+
+Rajkot:{
+markets:[
+["Rajkot APMC",2850],
+["Gondal APMC",2900]
+]
+},
+
+Surat:{
+markets:[
+["Surat APMC",2950],
+["Bardoli APMC",2880]
+]
+},
+
+Vadodara:{
+markets:[
+["Vadodara APMC",2700],
+["Savli APMC",2680]
+]
+}
+
+},
+
+Karnataka:{
+
+Bengaluru:{
+markets:[
+["Bengaluru APMC",3000],
+["Yeshwanthpur Market",3100]
+]
+},
+
+Mysuru:{
+markets:[
+["Mysuru APMC",2850],
+["Nanjangud Market",2800]
+]
+},
+
+Belagavi:{
+markets:[
+["Belagavi APMC",2750],
+["Gokak Market",2700]
+]
+},
+
+Hubballi:{
+markets:[
+["Hubballi APMC",2900],
+["Dharwad APMC",2850]
+]
+}
+
+}
+
+};
+
+
+const CROPS={
+
+Onion:2500,
+Tomato:1800,
+Potato:2200,
+Wheat:2450,
+Maize:2250,
+Soybean:4400,
+Tur:7300,
+Gram:5450,
+Groundnut:5300,
+Sugarcane:3400
+
+};
+
+
+/* =========================================================
+LIVE GOVERNMENT MANDI API
+========================================================= */
+
+// Get your free API key from data.gov.in and paste it here.
+// Keep in mind: a key placed in frontend HTML is visible to visitors.
+const DATA_GOV_API_KEY = "YOUR_DATA_GOV_API_KEY";
+const DATA_GOV_RESOURCE_ID = "9ef84268-d588-465a-a308-a864a43d0070";
+const DATA_GOV_API_URL = `https://api.data.gov.in/resource/${DATA_GOV_RESOURCE_ID}`;
+let liveMandiMode = false;
+let lastLiveRecords = [];
+
+function hasLiveApiKey(){
+    return DATA_GOV_API_KEY && DATA_GOV_API_KEY !== "YOUR_DATA_GOV_API_KEY";
+}
+
+function apiStatusText(){
+    const el=document.getElementById("apiStatus");
+    if(!el) return;
+    el.textContent=hasLiveApiKey() ? (liveMandiMode ? "🟢 Government Mandi API: Connected" : "🟡 Government API: Ready") : "🟠 Government API: Add API key";
+}
+
+async function fetchLiveMandi(state, district, commodity){
+    if(!hasLiveApiKey()) throw new Error("API key missing");
+
+    const params=new URLSearchParams({
+        "api-key":DATA_GOV_API_KEY,
+        format:"json",
+        limit:"100",
+        "filters[state.keyword]":state,
+        "filters[district]":district,
+        "filters[commodity]":commodity
+    });
+
+    const response=await fetch(`${DATA_GOV_API_URL}?${params.toString()}`,{cache:"no-store"});
+    if(!response.ok) throw new Error(`Government API HTTP ${response.status}`);
+
+    const data=await response.json();
+    if(!Array.isArray(data.records) || !data.records.length){
+        throw new Error("No live records found for this selection");
+    }
+    return data.records;
+}
+
+function liveRecordsToMarkets(records,state,district,crop,quantity){
+    const qtl=quantity/100;
+    const byMarket=new Map();
+
+    // Keep one record per market, preferring the newest arrival date.
+    records.forEach(r=>{
+        const market=String(r.market||"").trim();
+        if(!market) return;
+        const modal=Number(String(r.modal_price||"").replace(/,/g,""));
+        const min=Number(String(r.min_price||"").replace(/,/g,""));
+        const max=Number(String(r.max_price||"").replace(/,/g,""));
+        if(!Number.isFinite(modal) || modal<=0) return;
+        const existing=byMarket.get(market);
+        if(!existing || String(r.arrival_date||"") > String(existing.arrival_date||"")){
+            byMarket.set(market,{...r,market,modal,min,max});
+        }
+    });
+
+    return [...byMarket.values()].map(r=>{
+        const transport=Math.max(100,quantity*0.025);
+        const revenue=qtl*r.modal;
+        return {
+            market:r.market, district, state, min:r.min||r.modal, modal:r.modal, max:r.max||r.modal,
+            revenue, transport, net:revenue-transport,
+            arrivalDate:r.arrival_date||"—", variety:r.variety||"—", grade:r.grade||"—",
+            source:"Government of India OGD / AGMARKNET"
+        };
+    }).sort((a,b)=>b.net-a.net);
+}
+
+function showApiMessage(message,ok=false){
+    const el=document.getElementById("apiMessage");
+    if(!el) return;
+    el.textContent=message;
+    el.style.display="block";
+    el.className="api-message "+(ok?"ok":"warn");
+}
+
+/* =========================================================
+HELPERS
+========================================================= */
+
+let currentLanguage="en";
+
+function t(key){
+    return LANG[currentLanguage][key] || LANG.en[key] || key;
+}
+
+function nameOf(key){
+    return NAMES[currentLanguage][key] || NAMES.en[key] || key;
+}
+
+
+/* =========================================================
+INITIALIZE
+========================================================= */
+
+function initialize(){
+
+    const state=document.getElementById("state");
+    const crop=document.getElementById("crop");
+
+    state.innerHTML="";
+
+    Object.keys(DATA).forEach(stateName=>{
+
+        const option=document.createElement("option");
+
+        option.value=stateName;
+        option.textContent=nameOf(stateName);
+
+        state.appendChild(option);
+
+    });
+
+
+    crop.innerHTML="";
+
+    Object.keys(CROPS).forEach(cropName=>{
+
+        const option=document.createElement("option");
+
+        option.value=cropName;
+        option.textContent=nameOf(cropName);
+
+        crop.appendChild(option);
+
+    });
+
+
+    updateDistricts();
+    updateAdminStats();
+
+}
+
+
+/* =========================================================
+DISTRICT
+========================================================= */
+
+function updateDistricts(){
+
+    const stateName=document.getElementById("state").value;
+
+    const district=document.getElementById("district");
+
+    district.innerHTML="";
+
+    const districts=Object.keys(DATA[stateName]);
+
+    districts.forEach(districtName=>{
+
+        const option=document.createElement("option");
+
+        option.value=districtName;
+        option.textContent=nameOf(districtName);
+
+        district.appendChild(option);
+
+    });
+
+
+    district.selectedIndex=0;
+
+    const selectedDistrict=districts[0];
+
+    document.getElementById("location").value=
+        nameOf(selectedDistrict);
+
+    updateMap(stateName,selectedDistrict);
+
+}
+
+
+/* =========================================================
+EVENTS
+========================================================= */
+
+document.getElementById("state").addEventListener("change",function(){
+
+    updateDistricts();
+    findMarkets();
+
+});
+
+
+document.getElementById("district").addEventListener("change",function(){
+
+    const district=this.value;
+
+    document.getElementById("location").value=nameOf(district);
+
+    findMarkets();
+
+});
+
+
+document.getElementById("crop").addEventListener("change",findMarkets);
+
+document.getElementById("quantity").addEventListener("input",function(){
+    updateWeightPreview();
+    findMarkets();
+});
+
+
+/* =========================================================
+FIND MARKETS
+========================================================= */
+
+
+function setWeight(value){
+    const input=document.getElementById("quantity");
+    input.value=value;
+    updateWeightPreview();
+    findMarkets();
+}
+
+function updateWeightPreview(){
+    const value=Number(document.getElementById("quantity").value)||0;
+    const quintal=value/100;
+    const tonnes=value/1000;
+    const preview=document.getElementById("weightPreview");
+    if(!preview) return;
+
+    if(value<=0){
+        preview.textContent="⚖️ Enter weight in kg";
+        return;
+    }
+
+    const kg=value.toLocaleString("en-IN");
+    const q=quintal.toLocaleString("en-IN",{maximumFractionDigits:2});
+    const t=tonnes.toLocaleString("en-IN",{maximumFractionDigits:2});
+    preview.textContent=`⚖️ ${kg} kg = ${q} quintals = ${t} tonne${tonnes===1?"":"s"}`;
+}
+
+async function findMarkets(){
+
+    const stateName=document.getElementById("state").value;
+    const districtName=document.getElementById("district").value;
+    const crop=document.getElementById("crop").value;
+    const quantity=Number(document.getElementById("quantity").value);
+
+    if(!quantity || quantity<=0){
+        resetPrediction();
+        return;
+    }
+
+    // Try live Government data first when an API key is configured.
+    if(hasLiveApiKey()){
+        showApiMessage("⏳ Fetching latest mandi prices from data.gov.in…");
+        try{
+            const records=await fetchLiveMandi(stateName,districtName,crop);
+            const markets=liveRecordsToMarkets(records,stateName,districtName,crop,quantity);
+            if(!markets.length) throw new Error("No usable market prices returned");
+
+            liveMandiMode=true;
+            lastLiveRecords=records;
+            apiStatusText();
+            renderMarkets(markets,crop,quantity);
+            updatePrediction(markets[0],crop,quantity);
+            updateDashboard(markets[0],crop,districtName);
+            updateMap(stateName,districtName);
+            showApiMessage(`✅ ${markets.length} market(s) loaded from Government of India mandi data. Latest reported date: ${markets[0].arrivalDate}.`,true);
+            return;
+        }catch(err){
+            liveMandiMode=false;
+            apiStatusText();
+            showApiMessage(`⚠ Live API unavailable (${err.message}). Showing demo data instead.`);
+        }
+    }else{
+        apiStatusText();
+        showApiMessage("ℹ Add your data.gov.in API key in the code to enable live mandi prices.");
+    }
+
+    // Safe fallback for your college demo when the API is not configured.
+    const districtData=DATA[stateName]?.[districtName];
+    if(!districtData){ resetPrediction(); return; }
+
+    const cropBase=CROPS[crop];
+    const markets=districtData.markets.map(item=>{
+        const marketName=item[0];
+        const marketBase=item[1];
+        const adjustment=cropBase/2500;
+        const modal=Math.round(marketBase*adjustment);
+        const min=Math.round(modal*.72);
+        const max=Math.round(modal*1.28);
+        const quintal=quantity/100;
+        const revenue=quintal*modal;
+        const transport=Math.max(100,quantity*.025);
+        return {market:marketName,district:districtName,state:stateName,min,modal,max,revenue,transport,net:revenue-transport,source:"Demo data"};
+    }).sort((a,b)=>b.net-a.net);
+
+    renderMarkets(markets,crop,quantity);
+    updatePrediction(markets[0],crop,quantity);
+    updateDashboard(markets[0],crop,districtName);
+    updateMap(stateName,districtName);
+}
+
+/* =========================================================
+RENDER MARKET
+========================================================= */
+
+function renderMarkets(markets,crop,quantity){
+
+    const container=document.getElementById("results");
+
+    container.innerHTML="";
+
+
+    markets.forEach((market,index)=>{
+
+        const card=document.createElement("div");
+
+        card.className=
+            "market-card "+
+            (index===0?"best":"");
+
+
+        card.innerHTML=`
+
+        <div class="market-head">
+
+            <div class="rank">
+                ${index+1}
+            </div>
+
+            <div class="market-name">
+
+                <h3>
+                    ${nameOf(market.market)}
+                </h3>
+
+                <small>
+                    ${nameOf(market.district)},
+                    ${nameOf(market.state)}
+                </small>
+
+            </div>
+
+            ${
+                index===0
+                ?
+                `<div class="badge">
+                    ${t("bestOption")}
+                </div>`
+                :
+                ""
+            }
+
+        </div>
+
+
+        <div class="details">
+
+            <div class="detail">
+                <small>${t("cropWord")}</small>
+                <strong>${nameOf(crop)}</strong>
+            </div>
+
+            <div class="detail">
+                <small>${t("quantityWord")}</small>
+                <strong>
+                    ${quantity.toLocaleString("en-IN")} kg
+                </strong>
+            </div>
+
+            <div class="detail">
+                <small>${t("minimum")}</small>
+                <strong>
+                    ₹${market.min.toLocaleString("en-IN")} /qtl
+                </strong>
+            </div>
+
+            <div class="detail">
+                <small>${t("modal")}</small>
+                <strong style="color:#087443">
+                    ₹${market.modal.toLocaleString("en-IN")} /qtl
+                </strong>
+            </div>
+
+            <div class="detail">
+                <small>${t("maximum")}</small>
+                <strong>
+                    ₹${market.max.toLocaleString("en-IN")} /qtl
+                </strong>
+            </div>
+
+            <div class="detail">
+                <small>${t("revenue")}</small>
+                <strong style="color:#087443">
+                    ₹${Math.round(
+                        market.revenue
+                    ).toLocaleString("en-IN")}
+                </strong>
+            </div>
+
+            <div class="detail">
+                <small>${t("transport")}</small>
+                <strong>
+                    ₹${Math.round(
+                        market.transport
+                    ).toLocaleString("en-IN")}
+                </strong>
+            </div>
+
+            <div class="detail">
+                <small>${t("net")}</small>
+                <strong style="color:#087443">
+                    ₹${Math.round(
+                        market.net
+                    ).toLocaleString("en-IN")}
+                </strong>
+            </div>
+
+        </div>
+
+        <p class="source">
+            ${market.source === "Demo data" ? t("demoOnly") : `🇮🇳 Government OGD • Reported ${market.arrivalDate} • ${market.variety || "Variety"}`}
+        </p>
+
+        `;
+
+
+        container.appendChild(card);
+
+    });
+
+
+    document.getElementById("adminMarkets").textContent=
+        markets.length;
+
+}
+
+
+/* =========================================================
+AI PREDICTION
+========================================================= */
+
+function updatePrediction(market,crop,quantity){
+
+    if(!market){
+
+        resetPrediction();
+        return;
+
+    }
+
+
+    const predicted=Math.round(
+        market.modal*1.04
+    );
+
+
+    const confidence=Math.min(
+        92,
+        70+Math.round(market.modal%10)
+    );
+
+
+    document.getElementById(
+        "predictionMarketTitle"
+    ).textContent=
+        `🌾 ${nameOf(crop)} — ${nameOf(market.market)}`;
+
+
+    document.getElementById(
+        "prediction"
+    ).textContent=
+        `₹${predicted.toLocaleString("en-IN")} /qtl`;
+
+
+    document.getElementById(
+        "predictionInfo"
+    ).textContent=
+        `${t("selectMessage")}`;
+
+
+    document.getElementById(
+        "confidenceBar"
+    ).style.width=
+        confidence+"%";
+
+
+    document.getElementById(
+        "confidence"
+    ).textContent=
+        `${t("confidenceWord")}: ${confidence}%`;
+
+
+    document.getElementById(
+        "aiModal"
+    ).textContent=
+        `₹${market.modal.toLocaleString("en-IN")}`;
+
+
+    document.getElementById(
+        "aiExpected"
+    ).textContent=
+        `₹${predicted.toLocaleString("en-IN")}`;
+
+
+    const predictedRevenue=
+        (quantity/100)*predicted;
+
+
+    document.getElementById(
+        "aiRevenue"
+    ).textContent=
+        `₹${Math.round(
+            predictedRevenue
+        ).toLocaleString("en-IN")}`;
+
+
+    document.getElementById(
+        "aiMarket"
+    ).textContent=
+        nameOf(market.market);
+
+}
+
+
+/* =========================================================
+RESET
+========================================================= */
+
+function resetPrediction(){
+
+    document.getElementById(
+        "predictionMarketTitle"
+    ).textContent=t("selectMarket");
+
+    document.getElementById(
+        "prediction"
+    ).textContent="₹—";
+
+    document.getElementById(
+        "predictionInfo"
+    ).textContent=t("selectMessage");
+
+    document.getElementById(
+        "confidenceBar"
+    ).style.width="0%";
+
+    document.getElementById(
+        "confidence"
+    ).textContent=
+        t("confidence")+": —";
+
+    document.getElementById(
+        "aiModal"
+    ).textContent="₹—";
+
+    document.getElementById(
+        "aiExpected"
+    ).textContent="₹—";
+
+    document.getElementById(
+        "aiRevenue"
+    ).textContent="₹—";
+
+    document.getElementById(
+        "aiMarket"
+    ).textContent="—";
+
+}
+
+
+/* =========================================================
+DASHBOARD
+========================================================= */
+
+function updateDashboard(market,crop,district){
+
+    document.getElementById(
+        "dashCrop"
+    ).textContent=nameOf(crop);
+
+
+    document.getElementById(
+        "dashLocation"
+    ).textContent=nameOf(district);
+
+
+    if(market){
+
+        document.getElementById(
+            "dashPrice"
+        ).textContent=
+            "₹"+
+            market.modal.toLocaleString("en-IN");
+
+
+        document.getElementById(
+            "dashRevenue"
+        ).textContent=
+            "₹"+
+            Math.round(
+                market.revenue
+            ).toLocaleString("en-IN");
+
+    }
+
+}
+
+
+/* =========================================================
+MAP
+========================================================= */
+
+function updateMap(stateName,districtName){
+
+    document.getElementById(
+        "mapTitle"
+    ).textContent=
+        `${t("mapLocation")} ${nameOf(districtName)}, ${nameOf(stateName)}`;
+
+
+    document.getElementById(
+        "mapText"
+    ).textContent=
+        `${t("mapDemo")} ${nameOf(districtName)}.`;
+
+}
+
+
+function mapMandiClick(index){
+
+    const stateName=
+        document.getElementById("state").value;
+
+    const districtName=
+        document.getElementById("district").value;
+
+    const markets=
+        DATA[stateName]?.[districtName]?.markets || [];
+
+    if(markets[index]){
+
+        alert(
+            nameOf(markets[index][0])+
+            "\n\n"+
+            t("mandiAlert")
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+NAVIGATION
+========================================================= */
+
+function showPage(pageId,button){
+
+    document.querySelectorAll(".page-section")
+    .forEach(section=>{
+        section.classList.remove("active");
+    });
+
+
+    const page=document.getElementById(pageId);
+
+    if(page){
+
+        page.classList.add("active");
+
+        window.scrollTo({
+            top:0,
+            behavior:"smooth"
+        });
+
+    }
+
+
+    document.querySelectorAll(".nav-btn")
+    .forEach(btn=>{
+        btn.classList.remove("active");
+    });
+
+
+    if(button){
+        button.classList.add("active");
+    }
+
+}
+
+
+/* =========================================================
+GO TO PREDICTION
+========================================================= */
+
+function goPrediction(){
+
+    showPage(
+        "predictionPage",
+        document.querySelectorAll(".nav-btn")[1]
+    );
+
+}
+
+
+/* =========================================================
+VOICE
+========================================================= */
+
+function startVoice(){
+
+    const result=
+        document.getElementById("voiceResult");
+
+    const status=
+        document.getElementById("voiceStatus");
+
+    const speech=
+        document.getElementById("farmerSpeech");
+
+
+    result.style.display="block";
+
+
+    const Recognition=
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+
+    if(!Recognition){
+
+        status.textContent=
+            t("voiceNotSupported");
+
+        return;
+
+    }
+
+
+    const recognition=
+        new Recognition();
+
+
+    const language=
+        document.getElementById("language").value;
+
+
+    if(language==="mr"){
+        recognition.lang="mr-IN";
+    }
+    else if(language==="hi"){
+        recognition.lang="hi-IN";
+    }
+    else if(language==="gu"){
+        recognition.lang="gu-IN";
+    }
+    else{
+        recognition.lang="en-IN";
+    }
+
+
+    recognition.interimResults=false;
+
+
+    status.textContent=
+        t("voiceListening");
+
+
+    recognition.start();
+
+
+    recognition.onresult=function(event){
+
+        speech.textContent=
+            event.results[0][0].transcript;
+
+        status.textContent=
+            t("voiceCaptured");
+
+    };
+
+
+    recognition.onerror=function(){
+
+        status.textContent=
+            t("voiceUnavailable");
+
+    };
+
+}
+
+
+/* =========================================================
+ADMIN
+========================================================= */
+
+function updateAdminStats(){
+
+    let districts=0;
+    let markets=0;
+
+
+    Object.values(DATA).forEach(state=>{
+
+        districts+=Object.keys(state).length;
+
+
+        Object.values(state).forEach(district=>{
+
+            markets+=district.markets.length;
+
+        });
+
+    });
+
+
+    document.getElementById(
+        "adminStates"
+    ).textContent=
+        Object.keys(DATA).length;
+
+
+    document.getElementById(
+        "adminDistricts"
+    ).textContent=
+        districts;
+
+
+    document.getElementById(
+        "adminCrops"
+    ).textContent=
+        Object.keys(CROPS).length;
+
+
+    document.getElementById(
+        "adminMarkets"
+    ).textContent=
+        markets;
+
+}
+
+
+/* =========================================================
+TRANSLATE WHOLE WEBSITE
+========================================================= */
+
+function changeLanguage(){
+
+    currentLanguage=
+        document.getElementById("language").value;
+
+
+    localStorage.setItem(
+        "krishiLanguage",
+        currentLanguage
+    );
+
+
+    applyTranslations();
+
+    rebuildDynamicSelects();
+
+    findMarkets();
+
+}
+
+
+/* =========================================================
+STATIC TRANSLATIONS
+========================================================= */
+
+function applyTranslations(){
+
+    document.getElementById("heroTitle").textContent=
+        t("heroTitle");
+
+    document.getElementById("heroText").textContent=
+        t("heroText");
+
+    document.getElementById("heroButton").textContent=
+        t("findMarket");
+
+    document.querySelectorAll("[data-key]").forEach(element=>{
+
+        const key=element.getAttribute("data-key");
+
+        element.textContent=t(key);
+
+    });
+
+
+    document.getElementById("dashboardTitle").textContent=
+        t("dashboardTitle");
+
+    document.getElementById("dashboardText").textContent=
+        t("dashboardText");
+
+    document.getElementById("selectedCropText").textContent=
+        t("selectedCrop");
+
+    document.getElementById("selectedDistrictText").textContent=
+        t("selectedDistrict");
+
+    document.getElementById("bestPriceText").textContent=
+        t("bestPrice");
+
+    document.getElementById("estimatedRevenueText").textContent=
+        t("estimatedRevenue");
+
+
+    document.getElementById("stateLabel").textContent=
+        t("state");
+
+    document.getElementById("districtLabel").textContent=
+        t("district");
+
+    document.getElementById("cropLabel").textContent=
+        t("crop");
+
+    document.getElementById("quantityLabel").textContent=
+        t("quantity");
+
+    document.getElementById("locationLabel").textContent=
+        t("location");
+
+
+    document.getElementById("findButton").textContent=
+        t("findMarket");
+
+
+    document.getElementById("demoDataLabel").textContent=
+        t("demoData");
+
+    document.getElementById("demoDataText").textContent=
+        t("demoText");
+
+
+    document.getElementById("predictionTitlePage").textContent=
+        t("predictionPage");
+
+    document.getElementById("predictionTextPage").textContent=
+        t("predictionPageText");
+
+    document.getElementById("recommendedTitle").textContent=
+        t("recommended");
+
+    document.getElementById("currentModalText").textContent=
+        t("currentModal");
+
+    document.getElementById("expectedPriceText").textContent=
+        t("expectedPrice");
+
+    document.getElementById("expectedRevenueText").textContent=
+        t("expectedRevenue");
+
+    document.getElementById("marketText").textContent=
+        t("market");
+
+
+    document.getElementById("mapPageTitle").textContent=
+        t("mapPage");
+
+    document.getElementById("mapPageText").textContent=
+        t("mapPageText");
+
+
+    document.getElementById("buyersTitle").textContent=
+        t("buyers");
+
+    document.getElementById("buyersText").textContent=
+        t("buyersText");
+
+
+    document.getElementById("buyer1Title").textContent=
+        t("buyer1");
+
+    document.getElementById("buyer1Text").textContent=
+        t("buyer1Text");
+
+    document.getElementById("buyer1Tag").textContent=
+        t("vegetables");
+
+
+    document.getElementById("buyer2Title").textContent=
+        t("buyer2");
+
+    document.getElementById("buyer2Text").textContent=
+        t("buyer2Text");
+
+    document.getElementById("buyer2Tag").textContent=
+        t("grains");
+
+
+    document.getElementById("buyer3Title").textContent=
+        t("buyer3");
+
+    document.getElementById("buyer3Text").textContent=
+        t("buyer3Text");
+
+    document.getElementById("buyer3Tag").textContent=
+        t("trader");
+
+
+    document.getElementById("buyer4Title").textContent=
+        t("buyer4");
+
+    document.getElementById("buyer4Text").textContent=
+        t("buyer4Text");
+
+    document.getElementById("buyer4Tag").textContent=
+        t("directBuyer");
+
+
+    document.getElementById("adminTitle").textContent=
+        t("admin");
+
+    document.getElementById("adminText").textContent=
+        t("adminText");
+
+    document.getElementById("systemStatsTitle").textContent=
+        t("systemStats");
+
+    document.getElementById("totalStatesText").textContent=
+        t("totalStates");
+
+    document.getElementById("totalDistrictsText").textContent=
+        t("totalDistricts");
+
+    document.getElementById("totalCropsText").textContent=
+        t("totalCrops");
+
+    document.getElementById("totalMarketsText").textContent=
+        t("totalMarkets");
+
+
+    document.getElementById("systemStatusTitle").textContent=
+        t("systemStatus");
+
+    document.getElementById("websiteText").textContent=
+        t("website");
+
+    document.getElementById("aiModuleText").textContent=
+        t("aiModule");
+
+    document.getElementById("marketDatabaseText").textContent=
+        t("marketDatabase");
+
+    document.getElementById("governmentApiText").textContent=
+        t("governmentApi");
+
+    document.getElementById("onlineText").textContent=
+        t("online");
+
+    document.getElementById("activeText").textContent=
+        t("active");
+
+    document.getElementById("demoText").textContent=
+        t("demo");
+
+    document.getElementById("notConnectedText").textContent=
+        t("notConnected");
+
+
+    document.getElementById("projectDetailsTitle").textContent=
+        t("projectDetails");
+
+    document.getElementById("projectText").textContent=
+        t("project");
+
+    document.getElementById("versionText").textContent=
+        t("version");
+
+    document.getElementById("technologyText").textContent=
+        t("technology");
+
+    document.getElementById("dataTypeText").textContent=
+        t("dataType");
+
+    document.getElementById("sampleDataText").textContent=
+        t("sampleData");
+
+
+    document.getElementById("importantText").textContent=
+        t("important");
+
+    document.getElementById("importantDescription").textContent=
+        t("importantText");
+
+
+    document.getElementById("voiceTitle").textContent=
+        t("voiceTitle");
+
+    document.getElementById("voiceText").textContent=
+        t("voiceText");
+
+    document.getElementById("voiceButton").textContent=
+        t("talkAI");
+
+
+    document.getElementById("footerText").textContent=
+        t("footerText");
+
+    document.getElementById("footerDemo").textContent=
+        t("footerDemo");
+
+
+    document.getElementById("readyTitle").textContent=
+        t("readyTitle");
+
+    document.getElementById("readyText").textContent=
+        t("readyText");
+
+}
+
+
+/* =========================================================
+REBUILD SELECT BOXES AFTER LANGUAGE CHANGE
+========================================================= */
+
+function rebuildDynamicSelects(){
+
+    const stateValue=
+        document.getElementById("state").value;
+
+    const districtValue=
+        document.getElementById("district").value;
+
+    const cropValue=
+        document.getElementById("crop").value;
+
+
+    const state=document.getElementById("state");
+
+    state.innerHTML="";
+
+
+    Object.keys(DATA).forEach(stateName=>{
+
+        const option=document.createElement("option");
+
+        option.value=stateName;
+
+        option.textContent=nameOf(stateName);
+
+        state.appendChild(option);
+
+    });
+
+
+    if(DATA[stateValue]){
+        state.value=stateValue;
+    }
+
+
+    const district=
+        document.getElementById("district");
+
+    district.innerHTML="";
+
+
+    Object.keys(DATA[stateValue]).forEach(districtName=>{
+
+        const option=document.createElement("option");
+
+        option.value=districtName;
+
+        option.textContent=nameOf(districtName);
+
+        district.appendChild(option);
+
+    });
+
+
+    if(DATA[stateValue][districtValue]){
+        district.value=districtValue;
+    }
+
+
+    const crop=
+        document.getElementById("crop");
+
+    crop.innerHTML="";
+
+
+    Object.keys(CROPS).forEach(cropName=>{
+
+        const option=document.createElement("option");
+
+        option.value=cropName;
+
+        option.textContent=nameOf(cropName);
+
+        crop.appendChild(option);
+
+    });
+
+
+    crop.value=cropValue;
+
+
+    document.getElementById("location").value=
+        nameOf(district.value);
+
+}
+
+
+/* =========================================================
+LOAD SAVED LANGUAGE
+========================================================= */
+
+const savedLanguage=
+    localStorage.getItem("krishiLanguage");
+
+
+if(
+    savedLanguage &&
+    LANG[savedLanguage]
+){
+
+    currentLanguage=savedLanguage;
+
+    document.getElementById("language").value=
+        savedLanguage;
+
+}
+
+
+/* =========================================================
+START
+========================================================= */
+
+initialize();
+
+applyTranslations();
+
+findMarkets();
+
+</script>
+
+
+<script>
+/* =========================================================
+   HACKATHON FEATURES - OFFLINE DEMO
+========================================================= */
+let demoPriceOffset = 0;
+let currentDemoMarkets = [];
+
+function money(n){
+    return "₹" + Math.round(Number(n)||0).toLocaleString("en-IN");
+}
+
+function selectedMarketData(){
+    const stateName = document.getElementById("state")?.value;
+    const districtName = document.getElementById("district")?.value;
+    const crop = document.getElementById("crop")?.value;
+    const quantity = Number(document.getElementById("quantity")?.value || 0);
+
+    if(!stateName || !districtName || !crop || quantity <= 0) return [];
+    const rows = DATA[stateName]?.[districtName]?.markets || [];
+    const base = CROPS[crop] || 2500;
+
+    return rows.map((row,i)=>{
+        const market = row[0];
+        const listed = Number(row[1]) || base;
+        const modal = Math.max(500, listed + demoPriceOffset);
+        const transport = 700 + (i * 650) + Math.max(0, quantity - 1000) * 0.10;
+        const revenue = (quantity / 100) * modal;
+        const net = revenue - transport;
+        return {market, modal, transport, revenue, net};
+    }).sort((a,b)=>b.net-a.net);
+}
+
+function renderMarketTools(){
+    currentDemoMarkets = selectedMarketData();
+    const qty = Number(document.getElementById("quantity")?.value || 0);
+    const crop = document.getElementById("crop")?.value || "Crop";
+    const district = document.getElementById("district")?.value || "Market";
+
+    const tbody = document.getElementById("marketTableBody");
+    const summary = document.getElementById("marketSummary");
+    if(!tbody) return;
+
+    if(!currentDemoMarkets.length){
+        tbody.innerHTML = '<tr><td colspan="5">Search a market first.</td></tr>';
+        summary.textContent = "Select a crop and quantity on the Dashboard.";
+        return;
+    }
+
+    summary.textContent = `${nameOf(crop)} • ${qty.toLocaleString("en-IN")} kg • ${nameOf(district)}`;
+
+    tbody.innerHTML = currentDemoMarkets.map((m,i)=>`
+        <tr class="${i===0?'best-row':''}">
+          <td>${i===0?'⭐ ':''}${nameOf(m.market)}</td>
+          <td class="${i===0?'high':''}">${money(m.modal)}</td>
+          <td>${money(m.revenue)}</td>
+          <td>${money(m.transport)}</td>
+          <td class="${i===0?'high':''}">${money(m.net)}</td>
+        </tr>
+    `).join("");
+
+    document.getElementById("marketRecommendation").innerHTML =
+        `⭐ <strong>Best option:</strong> ${nameOf(currentDemoMarkets[0].market)} with estimated net income of <strong>${money(currentDemoMarkets[0].net)}</strong>.`;
+
+    document.getElementById("lastUpdated").textContent =
+        "Last updated: " + new Date().toLocaleTimeString("en-IN");
+
+    drawPriceChart(currentDemoMarkets[0].modal);
+}
+
+function refreshDemoPrices(){
+    demoPriceOffset = Math.floor(Math.random()*121) - 60;
+    renderMarketTools();
+    alert("Demo prices refreshed. For a real deployment, connect an official mandi-price API.");
+}
+
+function drawPriceChart(basePrice){
+    const canvas = document.getElementById("priceChart");
+    if(!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.max(300, rect.width*dpr);
+    canvas.height = Math.max(180, rect.height*dpr);
+    const ctx = canvas.getContext("2d");
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+
+    const w = rect.width, h = rect.height;
+    ctx.clearRect(0,0,w,h);
+
+    const values = [];
+    let v = basePrice - 170;
+    for(let i=0;i<7;i++){
+        v += Math.round((Math.random()-0.35)*90);
+        values.push(Math.max(500,v));
+    }
+
+    const min = Math.min(...values)-80;
+    const max = Math.max(...values)+80;
+    const pad = 35;
+    const xStep = (w-pad*2)/6;
+
+    ctx.strokeStyle = "#dfe9e2";
+    ctx.lineWidth = 1;
+    for(let i=0;i<4;i++){
+        const y = pad + i*(h-pad*2)/3;
+        ctx.beginPath(); ctx.moveTo(pad,y); ctx.lineTo(w-pad,y); ctx.stroke();
+    }
+
+    ctx.strokeStyle = "#087443";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    values.forEach((val,i)=>{
+        const x = pad+i*xStep;
+        const y = h-pad - ((val-min)/(max-min))*(h-pad*2);
+        if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    });
+    ctx.stroke();
+
+    ctx.fillStyle = "#087443";
+    ctx.font = "11px Arial";
+    values.forEach((val,i)=>{
+        const x = pad+i*xStep;
+        const y = h-pad - ((val-min)/(max-min))*(h-pad*2);
+        ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2); ctx.fill();
+        ctx.fillText(money(val), x-18, y-10);
+        ctx.fillStyle = "#718078";
+        ctx.fillText("D"+(i+1), x-8, h-10);
+        ctx.fillStyle = "#087443";
+    });
+}
+
+function calculateProfit(){
+    const q = Number(document.getElementById("profitQty")?.value || 0);
+    const p = Number(document.getElementById("profitPrice")?.value || 0);
+    const d = Number(document.getElementById("profitDistance")?.value || 0);
+    const rate = Number(document.getElementById("profitRate")?.value || 0);
+    const other = Number(document.getElementById("profitOther")?.value || 0);
+
+    const gross = (q/100)*p;
+    const transport = d*rate;
+    const net = gross-transport-other;
+
+    document.getElementById("grossRevenue").textContent = money(gross);
+    document.getElementById("transportCost").textContent = money(transport);
+    document.getElementById("otherCost").textContent = money(other);
+    document.getElementById("profitPerKg").textContent = q ? money(net/q) : "₹—";
+    document.getElementById("profitMain").textContent = money(net);
+
+    document.getElementById("profitAdvice").innerHTML =
+        net > 0
+        ? `✅ Estimated profit is <strong>${money(net)}</strong>. Compare this with other mandis before selling.`
+        : `⚠️ Estimated loss is <strong>${money(Math.abs(net))}</strong>. Try a higher-price market or reduce transport/other costs.`;
+}
+
+function updateWeather(){
+    const district = document.getElementById("district")?.value || "Pune";
+    const temp = 24 + Math.floor(Math.random()*10);
+    const humidity = 50 + Math.floor(Math.random()*35);
+    const rain = Math.floor(Math.random()*70);
+    const wind = 8 + Math.floor(Math.random()*15);
+    const conditions = ["Sunny","Partly Cloudy","Cloudy","Light Rain"];
+    const condition = conditions[Math.floor(Math.random()*conditions.length)];
+
+    document.getElementById("weatherLocation").textContent = district + ", Maharashtra";
+    document.getElementById("weatherTemp").textContent = temp + "°C";
+    document.getElementById("weatherCondition").textContent = condition;
+    document.getElementById("humidity").textContent = humidity + "%";
+    document.getElementById("wind").textContent = wind + " km/h";
+    document.getElementById("rainChance").textContent = rain + "%";
+
+    document.getElementById("weatherAdvice").textContent =
+        rain >= 50
+        ? "🌧️ Higher rain chance in this demo. Consider delaying transport of moisture-sensitive produce and check a live forecast before dispatch."
+        : "☀️ Demo conditions look suitable for transport. Still verify live weather before sending produce to the mandi.";
+}
+
+function createPriceAlert(){
+    const target = Number(document.getElementById("alertTarget").value || 0);
+    const crop = document.getElementById("crop")?.value || "crop";
+    const box = document.getElementById("alertCreated");
+    box.style.display = "block";
+    box.innerHTML = `🔔 Alert created for <strong>${nameOf(crop)}</strong> at <strong>${money(target)}/quintal</strong>. This offline demo stores the alert only for this page session.`;
+}
+
+function addChat(text, type){
+    const box = document.getElementById("chatBox");
+    const div = document.createElement("div");
+    div.className = "chat-msg " + type;
+    div.textContent = text;
+    box.appendChild(div);
+    box.scrollTop = box.scrollHeight;
+}
+
+function botReply(message){
+    const msg = message.toLowerCase();
+    const markets = currentDemoMarkets.length ? currentDemoMarkets : selectedMarketData();
+    const crop = document.getElementById("crop")?.value || "crop";
+    const qty = Number(document.getElementById("quantity")?.value || 0);
+
+    if(msg.includes("where") || msg.includes("sell") || msg.includes("market") || msg.includes("mandi")){
+        if(markets.length){
+            const best = markets[0];
+            return `For ${nameOf(crop)} (${qty.toLocaleString("en-IN")} kg), the best demo option is ${nameOf(best.market)} with an estimated net income of ${money(best.net)} after demo transport cost.`;
+        }
+        return "Please select state, district, crop and quantity on the Dashboard first.";
+    }
+    if(msg.includes("profit") || msg.includes("income")){
+        calculateProfit();
+        const net = document.getElementById("profitMain").textContent;
+        return `Your current profit calculator estimate is ${net}. Open Profit Calculator to change quantity, price, distance and costs.`;
+    }
+    if(msg.includes("price") || msg.includes("rate") || msg.includes("भाव") || msg.includes("दर")){
+        if(markets.length) return `The highest demo modal price right now is ${money(markets[0].modal)}/quintal at ${nameOf(markets[0].market)}.`;
+        return "Select a crop and district first to see demo market prices.";
+    }
+    if(msg.includes("weight") || msg.includes("kg") || msg.includes("quantity")){
+        return `Your selected quantity is ${qty.toLocaleString("en-IN")} kg. Remember: 100 kg = 1 quintal and 1,000 kg = 1 tonne.`;
+    }
+    if(msg.includes("weather") || msg.includes("rain")){
+        return "Open the Weather section for the demo weather assistant. For actual farming decisions, connect a trusted live weather service.";
+    }
+    return "I can help with mandi selection, demo prices, profit, transport, weight and weather. Try: “Where should I sell my onion?”";
+}
+
+function sendChat(){
+    const input = document.getElementById("chatInput");
+    const text = input.value.trim();
+    if(!text) return;
+    addChat(text,"user");
+    input.value = "";
+    setTimeout(()=>addChat(botReply(text),"bot"),250);
+}
+
+function startChatVoice(){
+    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!Recognition){
+        addChat("Voice recognition is not supported in this browser.","bot");
+        return;
+    }
+    const r = new Recognition();
+    const lang = document.getElementById("language")?.value || "en";
+    r.lang = lang==="mr" ? "mr-IN" : lang==="hi" ? "hi-IN" : "en-IN";
+    r.onresult = e => {
+        const text = e.results[0][0].transcript;
+        document.getElementById("chatInput").value = text;
+        sendChat();
+    };
+    r.onerror = () => addChat("I could not hear that. Please try again.","bot");
+    r.start();
+}
+
+window.addEventListener("resize",()=>{
+    if(document.getElementById("marketPage")?.classList.contains("active") && currentDemoMarkets.length){
+        drawPriceChart(currentDemoMarkets[0].modal);
+    }
+});
+
+const originalFindMarkets = window.findMarkets;
+window.findMarkets = function(){
+    originalFindMarkets();
+    setTimeout(()=>{
+        renderMarketTools();
+        calculateProfit();
+        updateWeather();
+    },30);
+};
+
+setTimeout(()=>{
+    renderMarketTools();
+    calculateProfit();
+    updateWeather();
+},100);
+</script>
+
+
+</div>
+
+<script>
+/* ===== Farmer Setu Demo Login System ===== */
+(function(){
+  const AUTH_KEY = "farmerSetuDemoAccount";
+  const SESSION_KEY = "farmerSetuLoggedIn";
+
+  const authScreen = document.getElementById("authScreen");
+  const appShell = document.getElementById("appShell");
+  const loginForm = document.getElementById("loginForm");
+  const registerForm = document.getElementById("registerForm");
+  const loginTab = document.getElementById("loginTab");
+  const registerTab = document.getElementById("registerTab");
+  const loginMsg = document.getElementById("loginMsg");
+  const registerMsg = document.getElementById("registerMsg");
+
+  function showApp(user){
+    authScreen.style.display = "none";
+    appShell.style.display = "block";
+    document.body.style.overflow = "auto";
+
+    // Fill common farmer-name fields if the existing dashboard has one.
+    document.querySelectorAll(
+      'input[name="farmerName"], #farmerName, [data-farmer-name]'
+    ).forEach(el => { if(!el.value) el.value = user.name || ""; });
+
+    // Add a small logout control if the existing page does not already have one.
+    if(!document.getElementById("ksLogoutBtn")){
+      const btn = document.createElement("button");
+      btn.id = "ksLogoutBtn";
+      btn.className = "logout-btn";
+      btn.type = "button";
+      btn.textContent = "Logout";
+      btn.style.cssText =
+        "position:fixed;right:14px;top:14px;z-index:9000;border:0;border-radius:10px;" +
+        "padding:9px 13px;background:#fff;color:#b42318;font-weight:800;box-shadow:0 3px 14px rgba(0,0,0,.14);";
+      btn.addEventListener("click", function(){
+        localStorage.removeItem(SESSION_KEY);
+        appShell.style.display = "none";
+        authScreen.style.display = "flex";
+        document.body.style.overflow = "hidden";
+        loginForm.reset();
+        loginMsg.textContent = "";
+      });
+      document.body.appendChild(btn);
+    }
+  }
+
+  function showAuth(){
+    authScreen.style.display = "flex";
+    appShell.style.display = "none";
+    document.body.style.overflow = "hidden";
+  }
+
+  function setTab(tab){
+    const isLogin = tab === "login";
+    loginTab.classList.toggle("active", isLogin);
+    registerTab.classList.toggle("active", !isLogin);
+    loginForm.style.display = isLogin ? "block" : "none";
+    registerForm.style.display = isLogin ? "none" : "block";
+    loginMsg.textContent = "";
+    registerMsg.textContent = "";
+  }
+
+  loginTab.addEventListener("click", () => setTab("login"));
+  registerTab.addEventListener("click", () => setTab("register"));
+
+  document.querySelectorAll(".pass-toggle").forEach(btn => {
+    btn.addEventListener("click", function(){
+      const input = document.getElementById(this.dataset.target);
+      const visible = input.type === "text";
+      input.type = visible ? "password" : "text";
+      this.textContent = visible ? "Show" : "Hide";
+    });
+  });
+
+  registerForm.addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const name = document.getElementById("regName").value.trim();
+    const mobile = document.getElementById("regMobile").value.trim();
+    const email = document.getElementById("regEmail").value.trim();
+    const language = document.getElementById("regLanguage").value;
+    const password = document.getElementById("regPassword").value;
+    const confirm = document.getElementById("regConfirm").value;
+
+    if(!/^\d{10}$/.test(mobile)){
+      registerMsg.style.color = "#b42318";
+      registerMsg.textContent = "Enter a valid 10-digit mobile number.";
+      return;
+    }
+    if(password.length < 6){
+      registerMsg.style.color = "#b42318";
+      registerMsg.textContent = "Password must be at least 6 characters.";
+      return;
+    }
+    if(password !== confirm){
+      registerMsg.style.color = "#b42318";
+      registerMsg.textContent = "Passwords do not match.";
+      return;
+    }
+
+    const account = {name, mobile, email, language, password};
+    localStorage.setItem(AUTH_KEY, JSON.stringify(account));
+
+    registerMsg.style.color = "#067647";
+    registerMsg.textContent = "Account created! Opening dashboard...";
+
+    setTimeout(() => {
+      localStorage.setItem(SESSION_KEY, "true");
+      showApp(account);
+    }, 500);
+  });
+
+  loginForm.addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const loginId = document.getElementById("loginId").value.trim();
+    const password = document.getElementById("loginPassword").value;
+
+    let account = null;
+    try { account = JSON.parse(localStorage.getItem(AUTH_KEY) || "null"); } catch(err){}
+
+    if(!account){
+      loginMsg.style.color = "#b54708";
+      loginMsg.textContent = "No account found. Please Sign Up first.";
+      return;
+    }
+
+    const idMatches =
+      loginId === account.mobile ||
+      (account.email && loginId.toLowerCase() === account.email.toLowerCase());
+
+    if(!idMatches || password !== account.password){
+      loginMsg.style.color = "#b42318";
+      loginMsg.textContent = "Incorrect mobile/email or password.";
+      return;
+    }
+
+    localStorage.setItem(SESSION_KEY, "true");
+    loginMsg.style.color = "#067647";
+    loginMsg.textContent = "Login successful!";
+    setTimeout(() => showApp(account), 250);
+  });
+
+  // Auto-login during the same browser session/demo.
+  const session = localStorage.getItem(SESSION_KEY);
+  let account = null;
+  try { account = JSON.parse(localStorage.getItem(AUTH_KEY) || "null"); } catch(err){}
+
+  if(session === "true" && account){
+    showApp(account);
+  }else{
+    showAuth();
+  }
+})();
+</script>
+
+</body>
+</html>
